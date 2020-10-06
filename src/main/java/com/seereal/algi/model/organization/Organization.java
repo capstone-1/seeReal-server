@@ -16,9 +16,19 @@ public class Organization {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "organization_id")
     private Long id;
-
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
+    private String password;
+    @Column(nullable = false)
+    private String email;
+    @Column(nullable = false)
+    private String phoneNumber;
+    @Column(nullable = false)
+    private String registerNumber;
+    @Column(nullable = false)
+    private String account;
+
 
     private String businessReportLink;
     private String taxReportLink;
@@ -30,6 +40,7 @@ public class Organization {
     @OneToOne
     @JoinColumn(name = "tax_outcome_summary_id")
     private TaxOutcomeSummary taxOutcomeSummaryId;
+
 
     @Builder
     public Organization(String name, String businessReportLink, String taxReportLink) {
