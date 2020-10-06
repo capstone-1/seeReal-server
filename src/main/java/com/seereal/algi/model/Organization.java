@@ -43,5 +43,13 @@ public class Organization {
     public void setTaxOutcomeSummaryId(TaxOutcomeSummary taxOutcomeSummaryId) {
         this.taxOutcomeSummaryId = taxOutcomeSummaryId;
     }
+
+    public void setBusinessReportLink(String businessReportLink) {
+        this.businessReportLink = businessReportLink;
+    }
+
+    public void setTaxReportLink(String taxReportLink) {
+        this.taxReportLink = taxReportLink;
+    }
 }
 
