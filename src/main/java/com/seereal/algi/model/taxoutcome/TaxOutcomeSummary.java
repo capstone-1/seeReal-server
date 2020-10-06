@@ -1,4 +1,4 @@
-package com.seereal.algi.model;
+package com.seereal.algi.model.taxoutcome;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,5 +1,7 @@
-package com.seereal.algi.model;
+package com.seereal.algi.model.organization;
 
+import com.seereal.algi.model.taxincome.TaxIncomeSummary;
+import com.seereal.algi.model.taxoutcome.TaxOutcomeSummary;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +17,7 @@ public class Organization {
     @Column(name = "organization_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     private String businessReportLink;
