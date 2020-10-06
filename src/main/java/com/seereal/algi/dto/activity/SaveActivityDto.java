@@ -1,0 +1,1 @@
+package com.seereal.algi.dto.activity;import lombok.Getter;import lombok.NoArgsConstructor;@NoArgsConstructor@Getterpublic class SaveActivityDto {    private String name;    private String performance;    private String limitation;}

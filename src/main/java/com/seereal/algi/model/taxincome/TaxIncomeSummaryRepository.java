@@ -1,4 +1,4 @@
-package com.seereal.algi.model;
+package com.seereal.algi.model.taxincome;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
