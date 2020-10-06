@@ -5,7 +5,9 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import com.seereal.algi.model.*;
+import com.seereal.algi.dto.organization.OrganizationSignUpRequestDto;
+import com.seereal.algi.model.organization.Organization;
+import com.seereal.algi.model.organization.OrganizationRepository;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
@@ -45,6 +47,24 @@ public class OrganizationService {
         organizationRepository.save(organization);
         return presignedUrl.toExternalForm();
 
+    }
+
+    public String signUp(OrganizationSignUpRequestDto requestDto) {
+        if (organizationRepository.findByRegisterNumber(requestDto.getRegisterNumber()).isPresent()) {
+            return null;
+        }
+        return organizationRepository.save(convertToEntity(requestDto)).getName();
+    }
+
+    private Organization convertToEntity(OrganizationSignUpRequestDto requestDto) {
+        return Organization.builder()
+                            .name(requestDto.getName())
+                            .password(requestDto.getPassword())
+                            .account(requestDto.getAccount())
+                            .email(requestDto.getEmail())
+                            .phoneNumber(requestDto.getPhoneNumber())
+                            .registerNumber(requestDto.getRegisterNumber())
+                            .build();
     }
 
     private String parseS3Url(URL presignedUrl) {

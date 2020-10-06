@@ -24,12 +24,10 @@ public class Organization {
     private String email;
     @Column(nullable = false)
     private String phoneNumber;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String registerNumber;
     @Column(nullable = false)
     private String account;
-
-
     private String businessReportLink;
     private String taxReportLink;
 
@@ -41,26 +39,29 @@ public class Organization {
     @JoinColumn(name = "tax_outcome_summary_id")
     private TaxOutcomeSummary taxOutcomeSummaryId;
 
-
     @Builder
-    public Organization(String name, String businessReportLink, String taxReportLink) {
+    public Organization(String name, String password, String email, String phoneNumber, String registerNumber, String account) {
         this.name = name;
-        this.businessReportLink = businessReportLink;
-        this.taxReportLink = taxReportLink;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.registerNumber = registerNumber;
+        this.account = account;
+        this.businessReportLink = null;
+        this.taxReportLink = null;
+        this.taxIncomeSummary = null;
+        this.taxOutcomeSummaryId = null;
     }
 
     public void setTaxIncomeSummary(TaxIncomeSummary taxIncomeSummary) {
         this.taxIncomeSummary = taxIncomeSummary;
     }
-
     public void setTaxOutcomeSummaryId(TaxOutcomeSummary taxOutcomeSummaryId) {
         this.taxOutcomeSummaryId = taxOutcomeSummaryId;
     }
-
     public void setBusinessReportLink(String businessReportLink) {
         this.businessReportLink = businessReportLink;
     }
-
     public void setTaxReportLink(String taxReportLink) {
         this.taxReportLink = taxReportLink;
     }
