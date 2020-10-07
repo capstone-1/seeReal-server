@@ -3,6 +3,7 @@ package com.seereal.algi.dto.organization;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor

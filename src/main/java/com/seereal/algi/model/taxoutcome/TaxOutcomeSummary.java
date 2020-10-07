@@ -3,12 +3,14 @@ package com.seereal.algi.model.taxoutcome;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity(name = "tax_outcome_summary")
 @NoArgsConstructor
 @Getter
+@Setter
 public class TaxOutcomeSummary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

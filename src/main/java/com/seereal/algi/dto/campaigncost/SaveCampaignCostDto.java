@@ -1,1 +1,0 @@
-package com.seereal.algi.dto.campaigncost;import lombok.Getter;import lombok.NoArgsConstructor;@NoArgsConstructor@Getterpublic class SaveCampaignCostDto {    private String useDate;    private String content;    private Integer cost;}

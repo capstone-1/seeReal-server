@@ -1,1 +1,0 @@
-package com.seereal.algi.dto.campaign;import lombok.Getter;import lombok.NoArgsConstructor;@NoArgsConstructor@Getterpublic class SaveCampaginDto {    private String name;    private String start;    private String end;}
