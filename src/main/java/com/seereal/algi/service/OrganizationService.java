@@ -232,4 +232,10 @@ public class OrganizationService {
                 .map(campaignCost -> modelMapper.map(campaignCost, CampaignCostResponseDto.class))
                 .collect(Collectors.toList());
     }
+
+    public String findRegisterNumberByEmailAndName(String email, String name) {
+        return organizationRepository.findByEmailAndName(email, name)
+                .orElseThrow(() -> new IllegalArgumentException("기관 이름, 이메일과 일치하는 정보가 없습니다."))
+                .getRegisterNumber();
+    }
 }

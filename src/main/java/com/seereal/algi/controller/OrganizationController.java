@@ -107,4 +107,9 @@ public class OrganizationController {
         JwtPostAuthorizationToken token = (JwtPostAuthorizationToken)authentication;
         return token.getOrganizationContext().getUsername();
     }
+
+    @GetMapping("/find/register-number-by-email")
+    public ResponseEntity<String> findRegisterNumberByEmail(@RequestParam String email, @RequestParam String name) {
+        return ResponseEntity.ok(organizationService.findRegisterNumberByEmailAndName(email, name));
+    }
 }

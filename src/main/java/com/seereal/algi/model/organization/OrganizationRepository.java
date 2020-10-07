@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface OrganizationRepository extends JpaRepository<Organization, Long> {
     Optional<Organization> findByName(String name);
     Optional<Organization> findByRegisterNumber(String registerNumber);
+    Optional<Organization> findByEmailAndName(String email, String name);
 }
