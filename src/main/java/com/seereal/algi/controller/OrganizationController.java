@@ -3,12 +3,10 @@ package com.seereal.algi.controller;
 import com.seereal.algi.dto.activity.ActivityRequestDto;
 import com.seereal.algi.dto.campaign.CampaginRequestDto;
 import com.seereal.algi.dto.campaigncost.CampaignCostRequestDto;
-import com.seereal.algi.dto.organization.OrganizationLoginDto;
 import com.seereal.algi.dto.organization.OrganizationSignUpRequestDto;
 import com.seereal.algi.dto.taxincome.TaxIncomeSummaryRequestDto;
 import com.seereal.algi.dto.taxoutcome.TaxOutcomeSummaryRequestDto;
 import com.seereal.algi.security.token.JwtPostAuthorizationToken;
-import com.seereal.algi.security.token.LoginPostAuthorizationToken;
 import com.seereal.algi.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,16 +20,16 @@ public class OrganizationController {
     @Autowired
     private OrganizationService organizationService;
 
-    @GetMapping("/organization/business-report-presigned-url")
-    public String getPresignedUrlForBusinessReport(Authentication authentication) {
+    @GetMapping("/business-report-presigned-url")
+    public ResponseEntity<String> getPresignedUrlForBusinessReport(Authentication authentication) {
         JwtPostAuthorizationToken token = (JwtPostAuthorizationToken) authentication;
-        return organizationService.getPresignedUrlForBusinessReport(token.getOrganizationContext().getUsername());
+        return new ResponseEntity<>(organizationService.getPresignedUrlForBusinessReport(token.getOrganizationContext().getUsername()), HttpStatus.OK);
     }
 
-    @GetMapping("/organization/tax-report-presigned-url")
-    public String getPresignedUrlFortaxReport(Authentication authentication) {
+    @GetMapping("/tax-report-presigned-url")
+    public ResponseEntity<String> getPresignedUrlFortaxReport(Authentication authentication) {
         JwtPostAuthorizationToken token = (JwtPostAuthorizationToken) authentication;
-        return organizationService.getPresignedUrlForTaxReport(token.getOrganizationContext().getUsername());
+        return new ResponseEntity<>(organizationService.getPresignedUrlForTaxReport(token.getOrganizationContext().getUsername()), HttpStatus.OK);
     }
 
     @PostMapping("/signup")
@@ -104,15 +102,9 @@ public class OrganizationController {
         return ResponseEntity.ok(organizationService.lookupCampiagnCost(registerNumber));
     }
 
-    @PostMapping("/organization/login")
-    public String login(@RequestBody OrganizationLoginDto requestDto, Authentication authentication) {
-        LoginPostAuthorizationToken token = (LoginPostAuthorizationToken) authentication;
-        return token.getOrganizationContext().toString();
-    }
-
-    @GetMapping("/organization/jwt-test")
+    @GetMapping("/jwt-test")
     public String jwtTest(Authentication authentication) {
         JwtPostAuthorizationToken token = (JwtPostAuthorizationToken)authentication;
-        return token.getOrganizationContext().getUsername().toString();
+        return token.getOrganizationContext().getUsername();
     }
 }
