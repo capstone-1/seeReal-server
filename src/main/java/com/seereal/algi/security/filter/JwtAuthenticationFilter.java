@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.seereal.algi.security.SecurityConstants.HEADER_STRING;
+
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     private JwtAuthenticationFailureHandler failureHandler;
     private HeaderTokenExtractor extractor;
@@ -31,7 +33,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     }
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        String tokenPayload = request.getHeader("Authorization");
+        String tokenPayload = request.getHeader(HEADER_STRING);
         JwtPreAuthorizationToken token = new JwtPreAuthorizationToken(extractor.extract(tokenPayload));
         return super.getAuthenticationManager().authenticate(token);
     }

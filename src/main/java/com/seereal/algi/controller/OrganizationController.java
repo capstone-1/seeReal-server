@@ -22,18 +22,16 @@ public class OrganizationController {
     @Autowired
     private OrganizationService organizationService;
 
-    @GetMapping("/business-report-presigned-url")
-    public String getPresignedUrlForBusinessReport() {
-        //TODO: Get Organization Name from Session
-        String organizationName = "test123";
-        return organizationService.getPresignedUrlForBusinessReport(organizationName);
+    @GetMapping("/organization/business-report-presigned-url")
+    public String getPresignedUrlForBusinessReport(Authentication authentication) {
+        JwtPostAuthorizationToken token = (JwtPostAuthorizationToken) authentication;
+        return organizationService.getPresignedUrlForBusinessReport(token.getOrganizationContext().getUsername());
     }
 
-    @GetMapping("/tax-report-presigned-url")
-    public String getPresignedUrlFortaxReport() {
-        //TODO: Get Organization Name from Session
-        String organizationName = "test123";
-        return organizationService.getPresignedUrlForTaxReport(organizationName);
+    @GetMapping("/organization/tax-report-presigned-url")
+    public String getPresignedUrlFortaxReport(Authentication authentication) {
+        JwtPostAuthorizationToken token = (JwtPostAuthorizationToken) authentication;
+        return organizationService.getPresignedUrlForTaxReport(token.getOrganizationContext().getUsername());
     }
 
     @PostMapping("/signup")

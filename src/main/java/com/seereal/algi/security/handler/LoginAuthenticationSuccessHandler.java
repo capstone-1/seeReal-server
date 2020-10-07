@@ -38,10 +38,13 @@ public class LoginAuthenticationSuccessHandler implements AuthenticationSuccessH
     }
 
 
-    private void processResponse(HttpServletResponse response, TokenContext tokenContext) throws IOException {
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    private void processResponse(HttpServletResponse response, TokenContext tokenContext) {
         response.setStatus(HttpStatus.OK.value());
-        response.getWriter().write(objectMapper.writeValueAsString(tokenContext));
+        response.setHeader("Authorization", generateTokenValue(tokenContext.getToken()));
+    }
+
+    private String generateTokenValue(String token) {
+        return "Bearer " + token;
     }
 
     private Object writeToDto(String tokenString) {

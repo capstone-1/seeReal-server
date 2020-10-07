@@ -59,10 +59,10 @@ public class OrganizationService {
     private final TaxIncomeSummaryRepository incomeSummaryRepository;
     private final TaxOutcomeSummaryRepository outcomeSummaryRepository;
 
-    public String getPresignedUrlForBusinessReport(String organizationName) {
-        URL presignedUrl = getPresignedUrl(organizationName, BUSINESS_REPORT_NAME);
+    public String getPresignedUrlForBusinessReport(String registerNumber) {
+        URL presignedUrl = getPresignedUrl(registerNumber, BUSINESS_REPORT_NAME);
         //DB 저장
-        Organization organization = organizationRepository.findByName(organizationName)
+        Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                                                             .orElseThrow(() -> new IllegalArgumentException("Organization Not Found!"));
         organization.setBusinessReportLink(parseS3Url(presignedUrl));
         organizationRepository.save(organization);
@@ -70,10 +70,10 @@ public class OrganizationService {
         return presignedUrl.toExternalForm();
     }
 
-    public String getPresignedUrlForTaxReport(String organizationName) {
-        URL presignedUrl =  getPresignedUrl(organizationName, TAX_REPORT_NAME);
+    public String getPresignedUrlForTaxReport(String registerNumber) {
+        URL presignedUrl =  getPresignedUrl(registerNumber, TAX_REPORT_NAME);
         //DB 저장
-        Organization organization = organizationRepository.findByName(organizationName)
+        Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                                                             .orElseThrow(() -> new IllegalArgumentException("Organization Not Found!"));
         organization.setTaxReportLink(parseS3Url(presignedUrl));
         organizationRepository.save(organization);
