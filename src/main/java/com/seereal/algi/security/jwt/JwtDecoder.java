@@ -5,9 +5,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.seereal.algi.security.context.OrganizationContext;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
-
-import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 
 import static com.seereal.algi.security.SecurityConstants.SECRET_KEY;
@@ -22,14 +23,14 @@ public class JwtDecoder {
         return new OrganizationContext(registerNumber, name, role);
     }
 
-    private Optional<DecodedJWT> isValidJwtToken(String token) {
+    private Optional<DecodedJWT> isValidJwtToken(String token) throws AuthenticationCredentialsNotFoundException {
         DecodedJWT jwt = null;
         try {
             Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
             JWTVerifier verifier = JWT.require(algorithm).build();
             jwt = verifier.verify(token);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+             throw new AuthenticationCredentialsNotFoundException("Invalid Token!");
         }
         return Optional.ofNullable(jwt);
     }

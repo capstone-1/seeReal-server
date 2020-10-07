@@ -1,1 +1,0 @@
-insert into ORGANIZATION values(1, '123', null, 'email.com', 'name', '321321321','0101010101', '123123123', null, null, null)
