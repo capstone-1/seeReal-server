@@ -108,8 +108,13 @@ public class OrganizationController {
         return token.getOrganizationContext().getUsername();
     }
 
-    @GetMapping("/find/register-number-by-email")
+    @GetMapping("/find/register-number")
     public ResponseEntity<String> findRegisterNumberByEmail(@RequestParam String email, @RequestParam String name) {
         return ResponseEntity.ok(organizationService.findRegisterNumberByEmailAndName(email, name));
+    }
+
+    @GetMapping("/find/password")
+    public ResponseEntity<String> findPassword(@RequestParam String registerNumber) {
+        return ResponseEntity.ok(organizationService.findPassword(registerNumber));
     }
 }

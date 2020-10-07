@@ -30,6 +30,7 @@ import com.seereal.algi.model.taxoutcome.TaxOutcomeSummary;
 import com.seereal.algi.model.taxoutcome.TaxOutcomeSummaryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -237,5 +238,12 @@ public class OrganizationService {
         return organizationRepository.findByEmailAndName(email, name)
                 .orElseThrow(() -> new IllegalArgumentException("기관 이름, 이메일과 일치하는 정보가 없습니다."))
                 .getRegisterNumber();
+    }
+
+    public String findPassword(String registerNumber) {
+        Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
+                .orElseThrow(() -> new IllegalArgumentException("기관 정보가 존재하지 않습니다."));
+        organization.setPassword(RandomStringUtils.randomAlphanumeric(10));
+        return organizationRepository.save(organization).getPassword();
     }
 }
