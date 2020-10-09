@@ -19,7 +19,7 @@ public class OrganizationContext extends User {
     }
 
     public static OrganizationContext fromOrganizationModel(Organization organization) {
-        return new OrganizationContext(organization, organization.getRegisterNumber(), organization.getPassword(), generatedAuthorities(Role.AGENCY));
+        return new OrganizationContext(organization, organization.getRegisterNumber(), organization.getPassword(), generateAuthorities(Role.AGENCY));
     }
 
     public OrganizationContext(String registerNumber, String name, String role) {
@@ -27,9 +27,9 @@ public class OrganizationContext extends User {
     }
 
     private static List<SimpleGrantedAuthority> generateAuthorities(String role) {
-        return generatedAuthorities(Role.valueOf(role));
+        return generateAuthorities(Role.valueOf(role));
     }
-    private static List<SimpleGrantedAuthority> generatedAuthorities(Role role) {
+    private static List<SimpleGrantedAuthority> generateAuthorities(Role role) {
         return Stream.of(role).map(r -> new SimpleGrantedAuthority(r.getKey()))
                               .collect(Collectors.toList());
     }

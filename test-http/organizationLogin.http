@@ -1,6 +1,6 @@
 POST http://localhost:8080/organization/login
 Content-Type: application/json
 
-{"registerNumber" : "123123123", "password" : "321321321" }
+{"registerNumber" : "12345678", "password" : "testpw" }
 
 ###

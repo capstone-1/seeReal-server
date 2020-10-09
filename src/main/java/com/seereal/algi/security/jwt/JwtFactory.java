@@ -3,6 +3,7 @@ package com.seereal.algi.security.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.seereal.algi.security.context.OrganizationContext;
+import com.seereal.algi.security.context.UserContext;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,21 @@ import static com.seereal.algi.security.SecurityConstants.*;
 
 @Component
 public class JwtFactory {
+    public String generateToken(UserContext context) {
+        String token = null;
+        try {
+            token = JWT.create()
+                    .withClaim("EMAIL", context.getUsername())
+                    .withClaim("NAME", context.getPassword())
+                    .withClaim("USER_ROLE", getUserRole(context.getAuthorities()))
+                    .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                    .sign(generateAlgorithm());
+        } catch(UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return token;
+    }
+
     public String generateToken(OrganizationContext context) {
         String token = null;
         try {
