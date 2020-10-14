@@ -1,0 +1,6 @@
+POST http://localhost:8080/campaign
+Content-Type: application/json
+
+{"name" : "campaign", "categories" : ["A", "B", "C"] }
+
+###
