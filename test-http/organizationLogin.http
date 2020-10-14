@@ -1,6 +1,10 @@
 POST http://localhost:8080/organization/login
 Content-Type: application/json
 
-{"registerNumber" : "12345678", "password" : "testpw" }
+{"registerNumber" : "11111111", "password" : "testpw" }
+
+###
+$2a$10$YkfCOo.i8O7uZT0VtOjWA.k9wzUUX6CCcDMVxE0CvL5VhKbxRAdaC
+$2a$10$aNsDD71tbXjEiRW8dp4JS.CyhnzRfx9ca0OrZlSyzDMfrqdiP/fvm
 
 ###
