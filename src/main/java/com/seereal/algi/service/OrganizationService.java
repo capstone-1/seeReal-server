@@ -34,6 +34,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +56,7 @@ public class OrganizationService {
     private final CampaignRepository campaignRepository;
     private final CampaignCostRepository costRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
     private final OrganizationRepository organizationRepository;
     private final AmazonS3 s3Client;
     private final TaxIncomeSummaryRepository incomeSummaryRepository;
@@ -92,7 +94,7 @@ public class OrganizationService {
     private Organization convertToEntity(OrganizationSignUpRequestDto requestDto) {
         return Organization.builder()
                             .name(requestDto.getName())
-                            .password(requestDto.getPassword())
+                            .password(passwordEncoder.encode(requestDto.getPassword()))
                             .account(requestDto.getAccount())
                             .email(requestDto.getEmail())
                             .phoneNumber(requestDto.getPhoneNumber())

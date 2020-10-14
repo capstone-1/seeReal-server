@@ -15,20 +15,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
 public class OrganizationLoginFilter extends AbstractAuthenticationProcessingFilter {
+
     private AuthenticationSuccessHandler authenticationSuccessHandler;
     private AuthenticationFailureHandler authenticationFailureHandler;
 
     public OrganizationLoginFilter(String defaultFilterProcessesUrl, AuthenticationSuccessHandler authenticationSuccessHandler, AuthenticationFailureHandler authenticationFailureHandler) {
         super(defaultFilterProcessesUrl);
-
         this.authenticationSuccessHandler = authenticationSuccessHandler;
         this.authenticationFailureHandler = authenticationFailureHandler;
-    }
-
-    public OrganizationLoginFilter(String defaultFilterProcessesUrl) {
-        super(defaultFilterProcessesUrl);
     }
 
     @Override
@@ -40,7 +35,7 @@ public class OrganizationLoginFilter extends AbstractAuthenticationProcessingFil
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        this.authenticationSuccessHandler.onAuthenticationSuccess(request, response,authResult);
+        this.authenticationSuccessHandler.onAuthenticationSuccess(request, response, authResult);
     }
 
     @Override

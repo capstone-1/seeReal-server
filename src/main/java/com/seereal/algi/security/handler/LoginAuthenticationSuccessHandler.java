@@ -27,7 +27,6 @@ public class LoginAuthenticationSuccessHandler implements AuthenticationSuccessH
         processResponse(response, writeToDto(tokenString));
     }
 
-
     private void processResponse(HttpServletResponse response, TokenContext tokenContext) {
         response.setStatus(HttpStatus.OK.value());
         response.setHeader("Authorization", generateTokenValue(tokenContext.getToken()));

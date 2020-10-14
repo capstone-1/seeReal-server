@@ -5,25 +5,28 @@ import com.seereal.algi.model.organization.OrganizationRepository;
 import com.seereal.algi.security.context.OrganizationContext;
 import com.seereal.algi.security.token.LoginPostAuthorizationToken;
 import com.seereal.algi.security.token.LoginPreAuthorizationToken;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
 
 @Component
+@RequiredArgsConstructor
 public class OrganizationLoginProvider implements AuthenticationProvider {
 
-    @Autowired
-    private OrganizationRepository organizationRepository;
+    private final OrganizationRepository organizationRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         LoginPreAuthorizationToken token = (LoginPreAuthorizationToken) authentication;
         String registerNumber = token.getUser();
-        String password = token.getPassword();
+        String password = passwordEncoder.encode(token.getPassword());
 
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                                                             .orElseThrow(() -> new NoSuchElementException("Register Number Not Found!"));
@@ -39,6 +42,6 @@ public class OrganizationLoginProvider implements AuthenticationProvider {
     }
 
     private boolean isCorrectPassword(String password, Organization organization) {
-        return organization.getPassword().equals(password);
+        return passwordEncoder.matches(password, organization.getPassword());
     }
 }

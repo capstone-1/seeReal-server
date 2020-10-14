@@ -18,5 +18,4 @@ public class JwtPostAuthorizationToken extends UsernamePasswordAuthenticationTok
     public OrganizationContext getOrganizationContext() {
         return (OrganizationContext) this.getPrincipal();
     }
-
 }

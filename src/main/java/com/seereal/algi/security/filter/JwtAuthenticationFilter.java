@@ -22,10 +22,6 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     private JwtAuthenticationFailureHandler failureHandler;
     private HeaderTokenExtractor extractor;
 
-    protected JwtAuthenticationFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
-        super(requiresAuthenticationRequestMatcher);
-    }
-
     public JwtAuthenticationFilter(RequestMatcher requestMatcher, JwtAuthenticationFailureHandler failureHandler, HeaderTokenExtractor extractor) {
         super(requestMatcher);
         this.failureHandler = failureHandler;
