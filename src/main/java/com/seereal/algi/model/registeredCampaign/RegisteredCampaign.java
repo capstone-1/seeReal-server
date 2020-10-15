@@ -6,13 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
-//@Entity(name = "registered_campaign")
+@Entity(name = "registered_campaign")
 public class RegisteredCampaign {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +22,8 @@ public class RegisteredCampaign {
     private String campaignName;
     private String campaignImage;
     private String introduction;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Integer targetAmount;
     private String target;
     private Integer targetNumber;
@@ -44,7 +45,7 @@ public class RegisteredCampaign {
     private List<Category> categories = new ArrayList<>();
 
     @Builder
-    public RegisteredCampaign(String campaignName, String campaignImage, String introduction, LocalDateTime startDate, LocalDateTime endDate, Integer targetAmount, String target, Integer targetNumber, String explanation, String workName, Integer workFee, String workEtc, String itemName, Integer itemNumber, String itemShop, Integer itemFee, Boolean hasReception, Boolean hasReview) {
+    public RegisteredCampaign(String campaignName, String campaignImage, String introduction, LocalDate startDate, LocalDate endDate, Integer targetAmount, String target, Integer targetNumber, String explanation, String workName, Integer workFee, String workEtc, String itemName, Integer itemNumber, String itemShop, Integer itemFee, Boolean hasReception, Boolean hasReview) {
         this.campaignName = campaignName;
         this.campaignImage = campaignImage;
         this.introduction = introduction;
@@ -67,5 +68,9 @@ public class RegisteredCampaign {
 
     public void addCategory(Category category) {
         this.categories.add(category);
+    }
+
+    public void setCampaignImageUrl(String url) {
+        this.campaignImage = url;
     }
 }

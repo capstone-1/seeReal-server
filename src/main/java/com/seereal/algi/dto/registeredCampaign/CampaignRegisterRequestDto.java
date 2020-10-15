@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,8 +15,8 @@ import java.util.List;
 public class CampaignRegisterRequestDto {
     private String campaignName;
     private String introduction;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Integer targetAmount;
     private String target;
     private Integer targetNumber;

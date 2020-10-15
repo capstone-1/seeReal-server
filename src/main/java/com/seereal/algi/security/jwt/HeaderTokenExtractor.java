@@ -3,7 +3,7 @@ package com.seereal.algi.security.jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import static com.seereal.algi.security.SecurityConstants.TOKEN_PREFIX;
+import static com.seereal.algi.config.constant.SecurityConstants.TOKEN_PREFIX;
 
 @Component
 public class HeaderTokenExtractor {

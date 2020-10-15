@@ -1,4 +1,4 @@
-package com.seereal.algi.security;
+package com.seereal.algi.config.constant;
 
 import java.util.ArrayList;
 import java.util.Arrays;

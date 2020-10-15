@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.Date;
 
-import static com.seereal.algi.security.SecurityConstants.*;
+import static com.seereal.algi.config.constant.SecurityConstants.*;
 
 @Component
 public class JwtFactory {

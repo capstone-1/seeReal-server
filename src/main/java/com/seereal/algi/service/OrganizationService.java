@@ -43,13 +43,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.seereal.algi.config.constant.S3Constants.*;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class OrganizationService {
-    private static String BUCKET_NAME = "capstone-seereal";
-    private static String BUSINESS_REPORT_NAME = "/business-report";
-    private static String TAX_REPORT_NAME = "/tax_report";
     private static Logger logger = LoggerFactory.getLogger(OrganizationService.class);
 
     private final ActivityRepository activityRepository;

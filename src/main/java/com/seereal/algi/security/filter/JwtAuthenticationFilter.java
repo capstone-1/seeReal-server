@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.seereal.algi.security.SecurityConstants.HEADER_STRING;
+import static com.seereal.algi.config.constant.SecurityConstants.HEADER_STRING;
 
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
     private JwtAuthenticationFailureHandler failureHandler;

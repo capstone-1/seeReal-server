@@ -1,6 +1,10 @@
 POST http://localhost:8080/campaign
 Content-Type: application/json
 
-{"name" : "campaign", "categories" : ["A", "B", "C"] }
+{"campaignName" : "campaign", "categories" : ["A", "B", "C"],"introduction" : "this is introduction", "startDate" : "2020-01-01"
+,"endDate" :  "2020-01-02", "targetAmount" :  100000, "target" :  "target", "targetNumber" :  10, "explanation" :  "explanation"
+, "workName" :  "workName", "workFee" :  100000, "workEtc" :  "workEtc", "itemName" :  "itemName", "itemNumber" :  10
+,"itemShop" :  "itemShop", "itemFee" :  100000, "hasReception" : true, "hasReview" :  true}
+
 
 ###
