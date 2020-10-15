@@ -1,10 +1,5 @@
 package com.seereal.algi.service;
 
-import com.amazonaws.HttpMethod;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.Headers;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.seereal.algi.dto.activity.ActivityRequestDto;
 import com.seereal.algi.dto.activity.ActivityResponseDto;
 import com.seereal.algi.dto.campaign.CampaginRequestDto;
@@ -28,6 +23,7 @@ import com.seereal.algi.model.taxincome.TaxIncomeSummary;
 import com.seereal.algi.model.taxincome.TaxIncomeSummaryRepository;
 import com.seereal.algi.model.taxoutcome.TaxOutcomeSummary;
 import com.seereal.algi.model.taxoutcome.TaxOutcomeSummaryRepository;
+import com.seereal.algi.service.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -39,7 +35,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URL;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,25 +54,25 @@ public class OrganizationService {
     private final OrganizationRepository organizationRepository;
     private final TaxIncomeSummaryRepository incomeSummaryRepository;
     private final TaxOutcomeSummaryRepository outcomeSummaryRepository;
-    private final S3Service s3Service;
+    private final S3Util s3Util;
 
     public String getPresignedUrlForBusinessReport(String registerNumber) {
-        URL presignedUrl = s3Service.getPresignedUrl(registerNumber, BUSINESS_REPORT_NAME);
+        URL presignedUrl = s3Util.getPresignedUrl(registerNumber, BUSINESS_REPORT_NAME);
         //DB 저장
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                                                             .orElseThrow(() -> new IllegalArgumentException("Organization Not Found!"));
-        organization.setBusinessReportLink(s3Service.parseS3Url(presignedUrl));
+        organization.setBusinessReportLink(s3Util.parseS3Url(presignedUrl));
         organizationRepository.save(organization);
 
         return presignedUrl.toExternalForm();
     }
 
     public String getPresignedUrlForTaxReport(String registerNumber) {
-        URL presignedUrl = s3Service.getPresignedUrl(registerNumber, TAX_REPORT_NAME);
+        URL presignedUrl = s3Util.getPresignedUrl(registerNumber, TAX_REPORT_NAME);
         //DB 저장
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                                                             .orElseThrow(() -> new IllegalArgumentException("Organization Not Found!"));
-        organization.setTaxReportLink(s3Service.parseS3Url(presignedUrl));
+        organization.setTaxReportLink(s3Util.parseS3Url(presignedUrl));
         organizationRepository.save(organization);
         return presignedUrl.toExternalForm();
 
