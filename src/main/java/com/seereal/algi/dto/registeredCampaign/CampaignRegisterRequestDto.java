@@ -1,6 +1,7 @@
 package com.seereal.algi.dto.registeredCampaign;
 
 
+import com.seereal.algi.model.registeredCampaign.RegisteredCampaign;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -31,4 +32,26 @@ public class CampaignRegisterRequestDto {
     private Boolean hasReception;
     private Boolean hasReview;
     private List<String> categories;
+
+    public RegisteredCampaign toEntity() {
+        return RegisteredCampaign.builder()
+                .campaignName(this.campaignName)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
+                .explanation(this.explanation)
+                .introduction(this.introduction)
+                .itemFee(this.itemFee)
+                .itemName(this.itemName)
+                .itemNumber(this.itemNumber)
+                .itemShop(this.itemShop)
+                .target(this.target)
+                .targetAmount(this.targetAmount)
+                .targetNumber(this.targetNumber)
+                .workEtc(this.workEtc)
+                .workFee(this.workFee)
+                .workName(this.workName)
+                .hasReception(this.hasReception)
+                .hasReview(this.hasReview)
+                .build();
+    }
 }

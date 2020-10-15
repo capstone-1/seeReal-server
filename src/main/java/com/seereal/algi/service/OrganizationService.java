@@ -57,27 +57,27 @@ public class OrganizationService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final OrganizationRepository organizationRepository;
-    private final AmazonS3 s3Client;
     private final TaxIncomeSummaryRepository incomeSummaryRepository;
     private final TaxOutcomeSummaryRepository outcomeSummaryRepository;
+    private final S3Service s3Service;
 
     public String getPresignedUrlForBusinessReport(String registerNumber) {
-        URL presignedUrl = getPresignedUrl(registerNumber, BUSINESS_REPORT_NAME);
+        URL presignedUrl = s3Service.getPresignedUrl(registerNumber, BUSINESS_REPORT_NAME);
         //DB 저장
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                                                             .orElseThrow(() -> new IllegalArgumentException("Organization Not Found!"));
-        organization.setBusinessReportLink(parseS3Url(presignedUrl));
+        organization.setBusinessReportLink(s3Service.parseS3Url(presignedUrl));
         organizationRepository.save(organization);
 
         return presignedUrl.toExternalForm();
     }
 
     public String getPresignedUrlForTaxReport(String registerNumber) {
-        URL presignedUrl =  getPresignedUrl(registerNumber, TAX_REPORT_NAME);
+        URL presignedUrl = s3Service.getPresignedUrl(registerNumber, TAX_REPORT_NAME);
         //DB 저장
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                                                             .orElseThrow(() -> new IllegalArgumentException("Organization Not Found!"));
-        organization.setTaxReportLink(parseS3Url(presignedUrl));
+        organization.setTaxReportLink(s3Service.parseS3Url(presignedUrl));
         organizationRepository.save(organization);
         return presignedUrl.toExternalForm();
 
@@ -87,36 +87,9 @@ public class OrganizationService {
         if (organizationRepository.findByRegisterNumber(requestDto.getRegisterNumber()).isPresent()) {
             return null;
         }
-        return organizationRepository.save(convertToEntity(requestDto)).getName();
-    }
-
-    private Organization convertToEntity(OrganizationSignUpRequestDto requestDto) {
-        return Organization.builder()
-                            .name(requestDto.getName())
-                            .password(passwordEncoder.encode(requestDto.getPassword()))
-                            .account(requestDto.getAccount())
-                            .email(requestDto.getEmail())
-                            .phoneNumber(requestDto.getPhoneNumber())
-                            .registerNumber(requestDto.getRegisterNumber())
-                            .build();
-    }
-
-    private String parseS3Url(URL presignedUrl) {
-        return presignedUrl.getProtocol() + "://" + presignedUrl.getHost() + presignedUrl.getPath();
-    }
-
-    private URL getPresignedUrl(String organizationName, String reportType) {
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(BUCKET_NAME, organizationName + reportType)
-                .withMethod(HttpMethod.PUT)
-                .withExpiration(getExpiration());
-        generatePresignedUrlRequest.addRequestParameter(Headers.S3_CANNED_ACL, CannedAccessControlList.PublicRead.toString());
-        return s3Client.generatePresignedUrl(generatePresignedUrlRequest);
-    }
-
-    private Date getExpiration() {
-        Date expiration = new Date();
-        expiration.setTime(expiration.getTime() + 1000 * 60 * 5);
-        return expiration;
+        Organization organization = requestDto.toEntity();
+        organization.passwordEncode(passwordEncoder);
+        return organizationRepository.save(organization).getName();
     }
 
     // 세입 등록, 이미 존재할 경우 업데이트
@@ -244,7 +217,7 @@ public class OrganizationService {
     public String findPassword(String registerNumber) {
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                 .orElseThrow(() -> new IllegalArgumentException("기관 정보가 존재하지 않습니다."));
-        organization.setPassword(RandomStringUtils.randomAlphanumeric(10));
+        organization.setPassword(passwordEncoder.encode(RandomStringUtils.randomAlphanumeric(10)));
         return organizationRepository.save(organization).getPassword();
     }
 }

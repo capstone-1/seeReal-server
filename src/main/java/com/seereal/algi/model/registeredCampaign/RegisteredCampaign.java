@@ -13,7 +13,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@Entity(name = "registered_campaign")
+@Entity
 public class RegisteredCampaign {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

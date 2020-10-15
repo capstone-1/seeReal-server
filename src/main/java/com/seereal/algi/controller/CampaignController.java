@@ -1,6 +1,7 @@
 package com.seereal.algi.controller;
 
 import com.seereal.algi.dto.registeredCampaign.CampaignRegisterRequestDto;
+import com.seereal.algi.dto.registeredCampaign.CampaignSuggestRequestDto;
 import com.seereal.algi.service.CampaignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,8 +13,13 @@ public class CampaignController {
     @Autowired
     private CampaignService campaignService;
 
-    @PostMapping("/campaign")
+    @PostMapping("/campaign/register")
     public String registerCampaign(@RequestBody CampaignRegisterRequestDto requestDto) {
        return campaignService.registerCampaign(requestDto);
+    }
+
+    @PostMapping("/campaign/suggest")
+    public Long suggestCampaign(@RequestBody CampaignSuggestRequestDto requestDto) {
+        return campaignService.suggestCampaign(requestDto);
     }
 }
