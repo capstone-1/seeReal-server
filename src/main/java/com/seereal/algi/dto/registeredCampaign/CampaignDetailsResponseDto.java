@@ -34,10 +34,11 @@ public class CampaignDetailsResponseDto {
     private Integer itemFee;
     private Boolean hasReception;
     private Boolean hasReview;
+    private Boolean isApprove;
     private List<String> categories = new ArrayList<>();
 
     @Builder
-    public CampaignDetailsResponseDto(String registrant, String campaignName, String campaignImage, String introduction, LocalDate startDate, LocalDate endDate, Integer targetAmount, String target, Integer targetNumber, String explanation, String workName, Integer workFee, String workEtc, String itemName, Integer itemNumber, String itemShop, Integer itemFee, Boolean hasReception, Boolean hasReview, List<String> categories) {
+    public CampaignDetailsResponseDto(String registrant, String campaignName, String campaignImage, String introduction, LocalDate startDate, LocalDate endDate, Integer targetAmount, String target, Integer targetNumber, String explanation, String workName, Integer workFee, String workEtc, String itemName, Integer itemNumber, String itemShop, Integer itemFee, Boolean hasReception, Boolean hasReview, List<String> categories, Boolean isApprove) {
         this.registrant = registrant;
         this.campaignName = campaignName;
         this.campaignImage = campaignImage;
@@ -58,6 +59,7 @@ public class CampaignDetailsResponseDto {
         this.hasReception = hasReception;
         this.hasReview = hasReview;
         this.categories = categories;
+        this.isApprove = isApprove;
     }
 
     public static CampaignDetailsResponseDto convertToDto(RegisteredCampaign campaign) {
@@ -81,6 +83,7 @@ public class CampaignDetailsResponseDto {
                 .itemFee(campaign.getItemFee())
                 .hasReception(campaign.getHasReception())
                 .hasReview(campaign.getHasReview())
+                .isApprove(campaign.getIsApprove())
                 .categories(campaign.getCategories().stream().map(Category::getName).collect(Collectors.toList()))
                 .build();
     }

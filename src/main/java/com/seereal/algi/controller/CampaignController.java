@@ -15,6 +15,7 @@ public class CampaignController {
     @Autowired
     private CampaignService campaignService;
 
+    // 캠페인 등록 (기업)
     @PostMapping("/campaign/register")
     public String registerCampaign(@RequestBody CampaignRegisterRequestDto requestDto) {
         //TODO: get registrant in JWT Token
@@ -22,16 +23,25 @@ public class CampaignController {
         return campaignService.registerCampaign(requestDto, registrant);
     }
 
+    //승인 대기 캠페인 조회
     @GetMapping("/campaign/before-approve")
     public List<BeforeApproveCampaignResponseDto> getCampaignBeforeApprove() {
         return campaignService.getAllCampaignsBeforeApprove();
     }
 
+    //캠페인 상세정보 조회
     @GetMapping("/campaign/{campaignName}")
     public CampaignDetailsResponseDto getCampaignDetails(@PathVariable("campaignName") String campaignName) {
         return campaignService.getCampaignDetails(campaignName);
 
     }
+
+    //캠페인 승인
+    @PutMapping("/campaign/approve/{campaignName}")
+    public CampaignDetailsResponseDto approveCampaign(@PathVariable("campaignName") String campaignName) {
+        return campaignService.approveCampaign(campaignName);
+    }
+
     @PostMapping("/campaign/suggest")
     public Long suggestCampaign(@RequestBody CampaignSuggestRequestDto requestDto) {
         return campaignService.suggestCampaign(requestDto);

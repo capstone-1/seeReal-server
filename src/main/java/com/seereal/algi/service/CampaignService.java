@@ -63,6 +63,13 @@ public class CampaignService {
                                             .orElseThrow(() -> new NoSuchElementException("No Campaign Details")));
     }
 
+    public CampaignDetailsResponseDto approveCampaign(String campaignName) {
+        RegisteredCampaign campaign = registeredCampaignRepository.findByCampaignName(campaignName)
+                                                                    .orElseThrow(() -> new NoSuchElementException("Invalid Category Name!"));
+        campaign.setApprove();
+        return CampaignDetailsResponseDto.convertToDto(registeredCampaignRepository.save(campaign));
+    }
+
     private List<Category> getCategories(List<String> categoryNames) {
         return categoryNames.stream().map(this::convertToCategory).collect(Collectors.toList());
     }
