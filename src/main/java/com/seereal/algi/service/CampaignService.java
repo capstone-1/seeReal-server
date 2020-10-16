@@ -1,5 +1,7 @@
 package com.seereal.algi.service;
 
+import com.seereal.algi.dto.registeredCampaign.BeforeApproveCampaignResponseDto;
+import com.seereal.algi.dto.registeredCampaign.CampaignDetailsResponseDto;
 import com.seereal.algi.dto.registeredCampaign.CampaignRegisterRequestDto;
 import com.seereal.algi.dto.registeredCampaign.CampaignSuggestRequestDto;
 import com.seereal.algi.model.category.Category;
@@ -46,6 +48,19 @@ public class CampaignService {
     public Long suggestCampaign(CampaignSuggestRequestDto requestDto) {
         SuggestedCampaign suggestedCampaign = requestDto.toEntity();
         return suggestedCampaignRepository.save(suggestedCampaign).getId();
+    }
+
+    public List<BeforeApproveCampaignResponseDto> getAllCampaignsBeforeApprove() {
+        System.out.println(registeredCampaignRepository.findAllNotApproved().size());
+        return registeredCampaignRepository.findAllNotApproved()
+                                            .stream()
+                                            .map(BeforeApproveCampaignResponseDto::convertToDto)
+                                            .collect(Collectors.toList());
+    }
+
+    public CampaignDetailsResponseDto getCampaignDetails(String campaignName) {
+        return CampaignDetailsResponseDto.convertToDto(registeredCampaignRepository.findByCampaignName(campaignName)
+                                            .orElseThrow(() -> new NoSuchElementException("No Campaign Details")));
     }
 
     private List<Category> getCategories(List<String> categoryNames) {

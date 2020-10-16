@@ -20,6 +20,7 @@ public class RegisteredCampaign {
     @Column(name = "registered_campaign_id")
     private Long id;
     private String registrant;
+    @Column(unique = true)
     private String campaignName;
     private String campaignImage;
     private String introduction;
