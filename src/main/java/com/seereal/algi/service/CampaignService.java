@@ -26,9 +26,9 @@ public class CampaignService {
     private final SuggestedCampaignRepository suggestedCampaignRepository;
     private final S3Util s3Util;
 
-    public String registerCampaign(CampaignRegisterRequestDto requestDto) {
+    public String registerCampaign(CampaignRegisterRequestDto requestDto, String registrant) {
         List<Category> categories = getCategories(requestDto.getCategories());
-        RegisteredCampaign registeredCampaign = requestDto.toEntity();
+        RegisteredCampaign registeredCampaign = requestDto.toEntityWithRegistrant(registrant);
 
         URL presignedUrl = s3Util.getPresignedUrl(registeredCampaign.getCampaignName());
         registeredCampaign.setCampaignImageUrl(s3Util.parseS3Url(presignedUrl));

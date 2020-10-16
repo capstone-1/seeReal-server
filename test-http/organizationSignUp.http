@@ -1,1 +1,6 @@
-POST http://localhost:8080/organization/signupContent-Type: application/json{"name" : "testName", "email" : "email.com", "phoneNumber" :  "010101010101", "account" :  "123123-123123-123123","registerNumber" : "11111111", "password" : "testpw" }###
+POST http://localhost:8080/organization/signup
+Content-Type: application/json
+
+{"name" : "testName", "email" : "email.com", "phoneNumber" :  "010101010101", "account" :  "123123-123123-123123","registerNumber" : "11111111", "password" : "testpw" }
+
+###

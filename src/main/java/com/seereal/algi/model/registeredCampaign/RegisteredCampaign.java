@@ -19,6 +19,7 @@ public class RegisteredCampaign {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "registered_campaign_id")
     private Long id;
+    private String registrant;
     private String campaignName;
     private String campaignImage;
     private String introduction;
@@ -37,6 +38,7 @@ public class RegisteredCampaign {
     private Integer itemFee;
     private Boolean hasReception;
     private Boolean hasReview;
+    private Boolean isApprove;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "campaign_category",
@@ -45,7 +47,8 @@ public class RegisteredCampaign {
     private List<Category> categories = new ArrayList<>();
 
     @Builder
-    public RegisteredCampaign(String campaignName, String campaignImage, String introduction, LocalDate startDate, LocalDate endDate, Integer targetAmount, String target, Integer targetNumber, String explanation, String workName, Integer workFee, String workEtc, String itemName, Integer itemNumber, String itemShop, Integer itemFee, Boolean hasReception, Boolean hasReview) {
+    public RegisteredCampaign(String registrant, String campaignName, String campaignImage, String introduction, LocalDate startDate, LocalDate endDate, Integer targetAmount, String target, Integer targetNumber, String explanation, String workName, Integer workFee, String workEtc, String itemName, Integer itemNumber, String itemShop, Integer itemFee, Boolean hasReception, Boolean hasReview) {
+        this.registrant = registrant;
         this.campaignName = campaignName;
         this.campaignImage = campaignImage;
         this.introduction = introduction;
@@ -64,12 +67,16 @@ public class RegisteredCampaign {
         this.itemFee = itemFee;
         this.hasReception = hasReception;
         this.hasReview = hasReview;
+        this.isApprove = false;
     }
 
     public void addCategory(Category category) {
         this.categories.add(category);
     }
 
+    public void setApprove() {
+        this.isApprove = true;
+    }
     public void setCampaignImageUrl(String url) {
         this.campaignImage = url;
     }

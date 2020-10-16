@@ -33,8 +33,9 @@ public class CampaignRegisterRequestDto {
     private Boolean hasReview;
     private List<String> categories;
 
-    public RegisteredCampaign toEntity() {
+    public RegisteredCampaign toEntityWithRegistrant(String registrant) {
         return RegisteredCampaign.builder()
+                .registrant(registrant)
                 .campaignName(this.campaignName)
                 .startDate(this.startDate)
                 .endDate(this.endDate)

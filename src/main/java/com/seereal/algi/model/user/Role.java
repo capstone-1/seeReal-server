@@ -1,1 +1,13 @@
-package com.seereal.algi.model.user;import lombok.Getter;import lombok.RequiredArgsConstructor;@Getter@RequiredArgsConstructorpublic enum Role {    GUEST("GUEST", "일반 사용자"),    AGENCY("AGENCY", "기관 사용자");    private final String key;    private final String title;}
+package com.seereal.algi.model.user;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public enum Role {
+    GUEST("GUEST", "일반 사용자"),
+    AGENCY("AGENCY", "기관 사용자");
+    private final String key;
+    private final String title;
+}

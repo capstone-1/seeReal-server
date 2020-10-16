@@ -15,7 +15,9 @@ public class CampaignController {
 
     @PostMapping("/campaign/register")
     public String registerCampaign(@RequestBody CampaignRegisterRequestDto requestDto) {
-       return campaignService.registerCampaign(requestDto);
+        //TODO: get registrant in JWT Token
+        String registrant = "tempRegistrant";
+        return campaignService.registerCampaign(requestDto, registrant);
     }
 
     @PostMapping("/campaign/suggest")

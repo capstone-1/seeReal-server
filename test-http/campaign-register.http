@@ -1,4 +1,4 @@
-POST http://localhost:8080/campaign
+POST http://localhost:8080/campaign/register
 Content-Type: application/json
 
 {"campaignName" : "campaign", "categories" : ["A", "B", "C"],"introduction" : "this is introduction", "startDate" : "2020-01-01"
