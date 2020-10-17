@@ -4,6 +4,8 @@ import com.seereal.algi.dto.registeredCampaign.BeforeApproveCampaignResponseDto;
 import com.seereal.algi.dto.registeredCampaign.CampaignDetailsResponseDto;
 import com.seereal.algi.dto.registeredCampaign.CampaignRegisterRequestDto;
 import com.seereal.algi.dto.registeredCampaign.CampaignSuggestRequestDto;
+import com.seereal.algi.model.campaignReview.PersonalCampaignReview;
+import com.seereal.algi.model.campaignReview.PersonalCampaignReviewRepository;
 import com.seereal.algi.model.category.Category;
 import com.seereal.algi.model.category.CategoryRepository;
 import com.seereal.algi.model.registeredCampaign.RegisteredCampaign;
@@ -26,6 +28,7 @@ public class CampaignService {
     private final CategoryRepository categoryRepository;
     private final RegisteredCampaignRepository registeredCampaignRepository;
     private final SuggestedCampaignRepository suggestedCampaignRepository;
+    private final PersonalCampaignReviewRepository personalCampaignReviewRepository;
     private final S3Util s3Util;
 
     public String registerCampaign(CampaignRegisterRequestDto requestDto, String registrant) {
@@ -67,6 +70,16 @@ public class CampaignService {
         RegisteredCampaign campaign = registeredCampaignRepository.findByCampaignName(campaignName)
                                                                     .orElseThrow(() -> new NoSuchElementException("Invalid Category Name!"));
         campaign.setApprove();
+        return CampaignDetailsResponseDto.convertToDto(registeredCampaignRepository.save(campaign));
+    }
+
+    public CampaignDetailsResponseDto addPersonalReview(String campaignName, String personalReview) {
+        RegisteredCampaign campaign = registeredCampaignRepository.findByCampaignName(campaignName)
+                .orElseThrow(() -> new NoSuchElementException("Invalid Category Name!"));
+        PersonalCampaignReview review =  new PersonalCampaignReview(personalReview);
+        campaign.addPersonalReview(review);
+
+        personalCampaignReviewRepository.save(review);
         return CampaignDetailsResponseDto.convertToDto(registeredCampaignRepository.save(campaign));
     }
 

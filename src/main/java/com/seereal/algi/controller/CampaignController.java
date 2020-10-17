@@ -42,6 +42,13 @@ public class CampaignController {
         return campaignService.approveCampaign(campaignName);
     }
 
+    // 개인 캠페인 후기 등록
+    @PostMapping("/campaign/personal-review/{campaignName}")
+    public CampaignDetailsResponseDto addPersonalReview(@PathVariable("campaignName") String campaignName, @RequestBody String personalReview) {
+        return campaignService.addPersonalReview(campaignName,personalReview);
+    }
+    //TODO: 기업 캠페인 결과 등록
+
     @PostMapping("/campaign/suggest")
     public Long suggestCampaign(@RequestBody CampaignSuggestRequestDto requestDto) {
         return campaignService.suggestCampaign(requestDto);

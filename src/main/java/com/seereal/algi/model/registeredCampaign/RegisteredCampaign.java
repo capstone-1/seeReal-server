@@ -1,5 +1,6 @@
 package com.seereal.algi.model.registeredCampaign;
 
+import com.seereal.algi.model.campaignReview.PersonalCampaignReview;
 import com.seereal.algi.model.category.Category;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,6 +48,10 @@ public class RegisteredCampaign {
                 inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories = new ArrayList<>();
 
+    @OneToMany
+    @JoinColumn(name = "registered_campaign_id")
+    private List<PersonalCampaignReview> personalReviews = new ArrayList<>();
+
     @Builder
     public RegisteredCampaign(String registrant, String campaignName, String campaignImage, String introduction, LocalDate startDate, LocalDate endDate, Integer targetAmount, String target, Integer targetNumber, String explanation, String workName, Integer workFee, String workEtc, String itemName, Integer itemNumber, String itemShop, Integer itemFee, Boolean hasReception, Boolean hasReview) {
         this.registrant = registrant;
@@ -73,6 +78,9 @@ public class RegisteredCampaign {
 
     public void addCategory(Category category) {
         this.categories.add(category);
+    }
+    public void addPersonalReview(PersonalCampaignReview personalCampaignReview) {
+        this.personalReviews.add(personalCampaignReview);
     }
 
     public void setApprove() {
