@@ -24,8 +24,8 @@ public class S3Util {
         return presignedUrl.getProtocol() + "://" + presignedUrl.getHost() + presignedUrl.getPath();
     }
 
-    public URL getPresignedUrl(String campaignName) {
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(BUCKET_NAME, CAMPAIGN_PREFIX + campaignName)
+    public URL getPresignedUrlForCampaign(String campaignName, String fileType) {
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(BUCKET_NAME, CAMPAIGN_PREFIX + campaignName + fileType)
                 .withMethod(HttpMethod.PUT)
                 .withExpiration(getExpiration());
         generatePresignedUrlRequest.addRequestParameter(Headers.S3_CANNED_ACL, CannedAccessControlList.PublicRead.toString());

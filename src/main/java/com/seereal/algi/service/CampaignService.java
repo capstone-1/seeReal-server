@@ -1,9 +1,9 @@
 package com.seereal.algi.service;
 
-import com.seereal.algi.dto.registeredCampaign.BeforeApproveCampaignResponseDto;
-import com.seereal.algi.dto.registeredCampaign.CampaignDetailsResponseDto;
-import com.seereal.algi.dto.registeredCampaign.CampaignRegisterRequestDto;
-import com.seereal.algi.dto.registeredCampaign.CampaignSuggestRequestDto;
+import com.seereal.algi.config.constant.S3Constants;
+import com.seereal.algi.dto.registeredCampaign.*;
+import com.seereal.algi.model.campaignReview.OrganizationCampaignReviewRepository;
+import com.seereal.algi.model.campaignReview.OrganizationCampignReview;
 import com.seereal.algi.model.campaignReview.PersonalCampaignReview;
 import com.seereal.algi.model.campaignReview.PersonalCampaignReviewRepository;
 import com.seereal.algi.model.category.Category;
@@ -29,13 +29,14 @@ public class CampaignService {
     private final RegisteredCampaignRepository registeredCampaignRepository;
     private final SuggestedCampaignRepository suggestedCampaignRepository;
     private final PersonalCampaignReviewRepository personalCampaignReviewRepository;
+    private final OrganizationCampaignReviewRepository organizationCampaignReviewRepository;
     private final S3Util s3Util;
 
     public String registerCampaign(CampaignRegisterRequestDto requestDto, String registrant) {
         List<Category> categories = getCategories(requestDto.getCategories());
         RegisteredCampaign registeredCampaign = requestDto.toEntityWithRegistrant(registrant);
 
-        URL presignedUrl = s3Util.getPresignedUrl(registeredCampaign.getCampaignName());
+        URL presignedUrl = s3Util.getPresignedUrlForCampaign(registeredCampaign.getCampaignName(), S3Constants.CAMPAIGN_IMAGE);
         registeredCampaign.setCampaignImageUrl(s3Util.parseS3Url(presignedUrl));
         // save
         for (Category category : categories) {
@@ -81,6 +82,23 @@ public class CampaignService {
 
         personalCampaignReviewRepository.save(review);
         return CampaignDetailsResponseDto.convertToDto(registeredCampaignRepository.save(campaign));
+    }
+
+    public OrgCampaignReviewResponseDto addOrganizationReview(String campaignName, OrgCampaignReviewRequestDto requestDto) {
+        RegisteredCampaign campaign = registeredCampaignRepository.findByCampaignName(campaignName)
+                .orElseThrow(() -> new NoSuchElementException("Invalid Category Name!"));
+        OrganizationCampignReview review = OrgCampaignReviewRequestDto.convertToEntity(requestDto);
+
+        URL presignedUrlForWorkReceipt = s3Util.getPresignedUrlForCampaign(campaignName, S3Constants.CAMPAIGN_WORK_RECIEPT);
+        review.setWorkReceiptUrl(s3Util.parseS3Url(presignedUrlForWorkReceipt));
+        URL presignedUrlForItemReceipt = s3Util.getPresignedUrlForCampaign(campaignName, S3Constants.CAMPAIGN_ITEM_RECIEPT);
+        review.setItemReceiptUrl(s3Util.parseS3Url(presignedUrlForItemReceipt));
+
+        campaign.addOrganizationReview(review);
+        organizationCampaignReviewRepository.save(review);
+        registeredCampaignRepository.save(campaign);
+
+        return new OrgCampaignReviewResponseDto(presignedUrlForItemReceipt.toExternalForm(), presignedUrlForWorkReceipt.toExternalForm());
     }
 
     private List<Category> getCategories(List<String> categoryNames) {

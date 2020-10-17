@@ -1,9 +1,6 @@
 package com.seereal.algi.controller;
 
-import com.seereal.algi.dto.registeredCampaign.BeforeApproveCampaignResponseDto;
-import com.seereal.algi.dto.registeredCampaign.CampaignDetailsResponseDto;
-import com.seereal.algi.dto.registeredCampaign.CampaignRegisterRequestDto;
-import com.seereal.algi.dto.registeredCampaign.CampaignSuggestRequestDto;
+import com.seereal.algi.dto.registeredCampaign.*;
 import com.seereal.algi.service.CampaignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +44,12 @@ public class CampaignController {
     public CampaignDetailsResponseDto addPersonalReview(@PathVariable("campaignName") String campaignName, @RequestBody String personalReview) {
         return campaignService.addPersonalReview(campaignName,personalReview);
     }
-    //TODO: 기업 캠페인 결과 등록
+
+    // 기업 캠페인 후기 등록
+    @PostMapping("campaign/organization-review/{campaignName}")
+    public OrgCampaignReviewResponseDto addOrganizationReview(@PathVariable("campaignName") String campaignName, @RequestBody OrgCampaignReviewRequestDto requestDto) {
+        return campaignService.addOrganizationReview(campaignName, requestDto);
+    }
 
     @PostMapping("/campaign/suggest")
     public Long suggestCampaign(@RequestBody CampaignSuggestRequestDto requestDto) {
