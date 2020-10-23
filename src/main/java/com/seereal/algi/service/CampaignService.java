@@ -14,9 +14,12 @@ import com.seereal.algi.model.suggestedCampaign.SuggestedCampaign;
 import com.seereal.algi.model.suggestedCampaign.SuggestedCampaignRepository;
 import com.seereal.algi.service.util.S3Util;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -30,12 +33,10 @@ public class CampaignService {
     private final SuggestedCampaignRepository suggestedCampaignRepository;
     private final PersonalCampaignReviewRepository personalCampaignReviewRepository;
     private final OrganizationCampaignReviewRepository organizationCampaignReviewRepository;
+    private final ModelMapper modelMapper;
     private final S3Util s3Util;
 
-    public String registerCampaign(CampaignRegisterRequestDto requestDto, String registrant) {
-        List<Category> categories = getCategories(requestDto.getCategories());
-        RegisteredCampaign registeredCampaign = requestDto.toEntityWithRegistrant(registrant);
-
+    public String saveCampaign(List<Category> categories, RegisteredCampaign registeredCampaign) {
         URL presignedUrl = s3Util.getPresignedUrlForCampaign(registeredCampaign.getCampaignName(), S3Constants.CAMPAIGN_IMAGE);
         registeredCampaign.setCampaignImageUrl(s3Util.parseS3Url(presignedUrl));
         // save
@@ -46,19 +47,61 @@ public class CampaignService {
         }
         registeredCampaignRepository.save(registeredCampaign);
 
-       return presignedUrl.toExternalForm();
+        return presignedUrl.toExternalForm();
     }
 
-    public Long suggestCampaign(CampaignSuggestRequestDto requestDto) {
-        SuggestedCampaign suggestedCampaign = requestDto.toEntity();
+    public String registerCampaign(CampaignRegisterRequestDto requestDto, String registrant) {
+        List<Category> categories = getCategories(requestDto.getCategories());
+        RegisteredCampaign registeredCampaign = requestDto.toEntityWithRegistrant(registrant);
+        return saveCampaign(categories, registeredCampaign);
+    }
+
+    public Long suggestCampaign(CampaignSuggestDto.RequestAndResponse requestDto, String registrant) {
+        SuggestedCampaign suggestedCampaign = requestDto.toEntityWithRegistrant(registrant);
         return suggestedCampaignRepository.save(suggestedCampaign).getId();
     }
 
-    public List<BeforeApproveCampaignResponseDto> getAllCampaignsBeforeApprove() {
-        System.out.println(registeredCampaignRepository.findAllNotApproved().size());
+    public List<SimpleCampaignResponseDto> getAllSuggestedCampaign() {
+        return suggestedCampaignRepository.findAll().stream()
+                .map(SimpleCampaignResponseDto::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public String approveSuggestedCampaign(Long id) {
+        SuggestedCampaign suggestedCampaign = suggestedCampaignRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Invalid Id!"));
+        List<String> parsedCategories = new ArrayList<>(Arrays.asList(suggestedCampaign.getCategories().split(", ")));
+        List<Category> categories = getCategories(parsedCategories);
+
+        RegisteredCampaign registeredCampaign = RegisteredCampaign.builder()
+                .registrant(suggestedCampaign.getRegistrant())
+                .campaignName(suggestedCampaign.getCampaignName())
+                .explanation(suggestedCampaign.getExplanation())
+                .startDate(suggestedCampaign.getStartDate())
+                .endDate(suggestedCampaign.getEndDate())
+                .introduction(suggestedCampaign.getIntroduction())
+                .target(suggestedCampaign.getTarget())
+                .targetAmount(suggestedCampaign.getTargetAmount())
+                .targetNumber(suggestedCampaign.getTargetNumber())
+                .workName(suggestedCampaign.getWorkName())
+                .workFee(suggestedCampaign.getWorkFee())
+                .workEtc(suggestedCampaign.getWorkEtc())
+                .itemName(suggestedCampaign.getItemName())
+                .itemNumber(suggestedCampaign.getItemNumber())
+                .itemShop(suggestedCampaign.getItemShop())
+                .itemFee(suggestedCampaign.getItemFee())
+                .hasReview(suggestedCampaign.getHasReview())
+                .hasReception(suggestedCampaign.getHasReception())
+                .build();
+        registeredCampaign.setApprove();
+        suggestedCampaignRepository.delete(suggestedCampaign);
+        return saveCampaign(categories, registeredCampaign);
+    }
+
+    public List<SimpleCampaignResponseDto> getAllCampaignsBeforeApprove() {
         return registeredCampaignRepository.findAllNotApproved()
                                             .stream()
-                                            .map(BeforeApproveCampaignResponseDto::convertToDto)
+                                            .map(SimpleCampaignResponseDto::convertToDto)
                                             .collect(Collectors.toList());
     }
 

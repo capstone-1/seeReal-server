@@ -3,6 +3,7 @@ package com.seereal.algi.model.registeredCampaign;
 import com.seereal.algi.model.campaignReview.OrganizationCampignReview;
 import com.seereal.algi.model.campaignReview.PersonalCampaignReview;
 import com.seereal.algi.model.category.Category;
+import com.sun.istack.Nullable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class RegisteredCampaign {
     private String registrant;
     @Column(unique = true)
     private String campaignName;
+    @Nullable
     private String campaignImage;
     private String introduction;
     private LocalDate startDate;

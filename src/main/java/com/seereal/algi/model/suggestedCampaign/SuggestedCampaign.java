@@ -19,8 +19,8 @@ public class SuggestedCampaign {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "suggested_campaign_id")
     private Long id;
+    private String registrant;
     private String campaignName;
-    private String categories;
     private String introduction;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -38,12 +38,14 @@ public class SuggestedCampaign {
     private String motivation;
     private Boolean hasReception;
     private Boolean hasReview;
+    private String categories;
 
     @Builder
-    public SuggestedCampaign(String campaignName, String categories, String introduction, LocalDate startDate, LocalDate endDate,
+    public SuggestedCampaign(String registrant, String campaignName, String categories, String introduction, LocalDate startDate, LocalDate endDate,
                              Integer targetAmount, String target, Integer targetNumber, String explanation, String workName, Integer workFee,
                              String workEtc, String itemName, Integer itemNumber, String itemShop, Integer itemFee, String motivation,
                              Boolean hasReception, Boolean hasReview){
+        this.registrant = registrant;
         this.campaignName = campaignName;
         this.categories = categories;
         this.introduction = introduction;
