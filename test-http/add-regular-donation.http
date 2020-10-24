@@ -1,0 +1,6 @@
+POST http://localhost:8080/regular-donation
+Content-Type: application/json
+
+{ "content" : "content", "shortIntroduction" : "short introduction", "target" : "target", "registrant" : "registrant", "introduction" : "introduction",
+"plan" :  "plan", "costPreviews" :  [{"name" :  "name1", "targetNum" :  1, "cost" :  1, "etc" :  "etc1"},{"name" :  "name2", "targetNum" :  1, "cost" :  1, "etc" :  "etc2"} ]}
+###
