@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 import java.net.URL;
 import java.util.Date;
 
-import static com.seereal.algi.config.constant.S3Constants.BUCKET_NAME;
-import static com.seereal.algi.config.constant.S3Constants.CAMPAIGN_PREFIX;
+import static com.seereal.algi.config.constant.S3Constants.*;
 
 @Component
 @RequiredArgsConstructor
@@ -25,21 +24,24 @@ public class S3Util {
     }
 
     public URL getPresignedUrlForCampaign(String campaignName, String fileType) {
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(BUCKET_NAME, CAMPAIGN_PREFIX + campaignName + fileType)
+        return getPresignedUrl(CAMPAIGN_PREFIX + campaignName + fileType);
+    }
+
+    public URL getPresignedUrlForRegularDonation(String regularDonationName, String fileType) {
+        return getPresignedUrl(REGULAR_DONATION_PREFIX + regularDonationName + fileType);
+    }
+
+    public URL getPresignedUrlForOrganization(String organizationName, String reportType) {
+        return getPresignedUrl(organizationName + reportType);
+    }
+
+    private URL getPresignedUrl(String key) {
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(BUCKET_NAME, key)
                 .withMethod(HttpMethod.PUT)
                 .withExpiration(getExpiration());
         generatePresignedUrlRequest.addRequestParameter(Headers.S3_CANNED_ACL, CannedAccessControlList.PublicRead.toString());
         return s3Client.generatePresignedUrl(generatePresignedUrlRequest);
     }
-
-    public URL getPresignedUrl(String organizationName, String reportType) {
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(BUCKET_NAME, organizationName + reportType)
-                .withMethod(HttpMethod.PUT)
-                .withExpiration(getExpiration());
-        generatePresignedUrlRequest.addRequestParameter(Headers.S3_CANNED_ACL, CannedAccessControlList.PublicRead.toString());
-        return s3Client.generatePresignedUrl(generatePresignedUrlRequest);
-    }
-
     private Date getExpiration() {
         Date expiration = new Date();
         expiration.setTime(expiration.getTime() + 1000 * 60 * 5);
