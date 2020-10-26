@@ -8,6 +8,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TaxOutcomeSummaryRequestDto {
     private Integer laborCost;
+    private Integer carriedAmount;
     private Integer consumableCost;
     private Integer rentCost;
     private Integer etcOperationCost;

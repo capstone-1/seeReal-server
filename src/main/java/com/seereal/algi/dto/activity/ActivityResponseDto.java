@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class ActivityResponseDto {
     private String name;
+    private String content;
     private String performance;
     private String limitation;
 }

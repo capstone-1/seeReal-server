@@ -18,6 +18,7 @@ public class Activity {
     @Column(name = "activity_id")
     private Long id;
     private String name;
+    private String content;
     private String performance;
     private String limitation;
 
@@ -26,8 +27,9 @@ public class Activity {
     private Organization organization;
 
     @Builder
-    public Activity(String name, String performance, String limitation){
+    public Activity(String name, String content, String performance, String limitation){
         this.name = name;
+        this.content = content;
         this.performance = performance;
         this.limitation = limitation;
     }

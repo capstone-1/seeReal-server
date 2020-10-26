@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 public class ActivityRequestDto {
     private String name;
+    private String content;
     private String performance;
     private String limitation;
 }

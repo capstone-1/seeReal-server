@@ -16,6 +16,7 @@ public class TaxOutcomeSummary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tax_outcome_summary_id")
     private Long id;
+    private Integer carriedAmount;
     private Integer laborCost;
     private Integer consumableCost;
     private Integer rentCost;
@@ -36,7 +37,8 @@ public class TaxOutcomeSummary {
     private Integer etcNonBusinessCost;
 
     @Builder
-    public TaxOutcomeSummary(Integer laborCost, Integer consumableCost, Integer rentCost, Integer etcOperationCost, Integer remedyCost, Integer eventCost, Integer promotionCost, Integer etcBusinessCost, Integer vatCost, Integer taxProcessingCost, Integer officeCost, Integer etcRecruitCost, Integer gasCost, Integer communicationCost, Integer etcCost, Integer conversionCost, Integer exchangeCost, Integer etcNonBusinessCost) {
+    public TaxOutcomeSummary(Integer carriedAmount, Integer laborCost, Integer consumableCost, Integer rentCost, Integer etcOperationCost, Integer remedyCost, Integer eventCost, Integer promotionCost, Integer etcBusinessCost, Integer vatCost, Integer taxProcessingCost, Integer officeCost, Integer etcRecruitCost, Integer gasCost, Integer communicationCost, Integer etcCost, Integer conversionCost, Integer exchangeCost, Integer etcNonBusinessCost) {
+        this.carriedAmount = carriedAmount;
         this.laborCost = laborCost;
         this.consumableCost = consumableCost;
         this.rentCost = rentCost;
