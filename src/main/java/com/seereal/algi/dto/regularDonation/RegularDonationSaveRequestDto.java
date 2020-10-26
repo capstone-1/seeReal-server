@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 public class RegularDonationSaveRequestDto {
+    private String name;
     private String registrant;
     private String shortIntroduction;
     private String target;
@@ -22,6 +23,7 @@ public class RegularDonationSaveRequestDto {
 
     public static RegularDonation convertToEntity(RegularDonationSaveRequestDto dto) {
         return RegularDonation.builder()
+                            .name(dto.getName())
                             .content(dto.getContent())
                             .introduction(dto.getIntroduction())
                             .plan(dto.getPlan())

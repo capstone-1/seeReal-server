@@ -17,6 +17,8 @@ public class RegularDonation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "regular_donation_id")
     private Long id;
+    @Column(unique = true)
+    private String name;
     private String registrant;
     private String shortIntroduction;
     private String profileUrl;
@@ -37,7 +39,8 @@ public class RegularDonation {
     private List<Category> categories = new ArrayList<>();
 
     @Builder
-    public RegularDonation(String registrant, String shortIntroduction, String profileUrl, String target, String content, String introduction, String plan) {
+    public RegularDonation(String name, String registrant, String shortIntroduction, String profileUrl, String target, String content, String introduction, String plan) {
+        this.name = name;
         this.registrant = registrant;
         this.shortIntroduction = shortIntroduction;
         this.profileUrl = profileUrl;
