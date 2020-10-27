@@ -145,7 +145,7 @@ public class CampaignService {
         return new OrgCampaignReviewResponseDto(presignedUrlForItemReceipt.toExternalForm(), presignedUrlForWorkReceipt.toExternalForm());
     }
 
-    public List<CampaignDetailsResponseDto> getCampaignByCategories(List<String> categories) {
+    public List<SimpleCampaignResponseDto> getCampaignByCategories(List<String> categories) {
         List<Category> categoryList = categories.stream()
                                                 .map(this::convertToCategory)
                                                 .collect(Collectors.toList());
@@ -153,7 +153,7 @@ public class CampaignService {
         for (Category category : categoryList) {
             categoryRepository.findByName(category.getName()).ifPresent(c -> campaigns.addAll(c.getRegisteredCampaigns()));
         }
-        return campaigns.stream().filter(RegisteredCampaign::getIsApprove).map(CampaignDetailsResponseDto::convertToDto).collect(Collectors.toList());
+        return campaigns.stream().filter(RegisteredCampaign::getIsApprove).map(SimpleCampaignResponseDto::convertToDto).collect(Collectors.toList());
     }
 
     private List<Category> getCategories(List<String> categoryNames) {

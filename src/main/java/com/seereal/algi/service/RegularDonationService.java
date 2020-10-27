@@ -118,7 +118,7 @@ public class RegularDonationService {
                 .build();
     }
 
-    public List<DetailDonationResponseDto> getRegularDonationsByCategory(List<String> categories) {
+    public List<SimpleDonationResponseDto> getRegularDonationsByCategory(List<String> categories) {
         List<Category> categoryList = categories.stream()
                 .map(this::convertToCategory)
                 .collect(Collectors.toList());
@@ -127,6 +127,6 @@ public class RegularDonationService {
         for (Category category : categoryList) {
             categoryRepository.findByName(category.getName()).ifPresent(c -> regularDonations.addAll(c.getDonations()));
         }
-        return regularDonations.stream().map(DetailDonationResponseDto::convertToDto).collect(Collectors.toList());
+        return regularDonations.stream().map(SimpleDonationResponseDto::new).collect(Collectors.toList());
     }
 }

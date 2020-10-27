@@ -21,10 +21,10 @@ public class SimpleCampaignResponseDto {
     }
 
     public static SimpleCampaignResponseDto convertToDto(RegisteredCampaign campaign) {
-        return SimpleCampaignResponseDto.builder().name(campaign.getCampaignName()).registrant(campaign.getRegistrant()).build();
+        return SimpleCampaignResponseDto.builder().id(campaign.getId()).name(campaign.getCampaignName()).registrant(campaign.getRegistrant()).build();
     }
 
     public static SimpleCampaignResponseDto convertToDto(SuggestedCampaign campaign) {
-        return SimpleCampaignResponseDto.builder().name(campaign.getCampaignName()).registrant(campaign.getRegistrant()).build();
+        return SimpleCampaignResponseDto.builder().id(campaign.getId()).name(campaign.getCampaignName()).registrant(campaign.getRegistrant()).build();
     }
 }

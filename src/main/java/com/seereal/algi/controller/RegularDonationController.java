@@ -43,7 +43,7 @@ public class RegularDonationController {
     //정기기부 분기별 결과 내 지출내역 등록
     @PostMapping("/regular-donation/cost/upload/{id}")
     public void saveRegularDonationCostResult(@RequestBody DonationCostResultDto.Request request,
-                                              @PathVariable("name") Long id,
+                                              @PathVariable("id") Long id,
                                               @RequestParam("quarter") Integer quarter) {
         regularDonationService.saveDonationCostResult(request, id, quarter);
     }
@@ -57,7 +57,7 @@ public class RegularDonationController {
 
     // 승인된 정기 기부 검색 (검색 조건 : 카테고리)
     @GetMapping("regular-donation/category")
-    public List<DetailDonationResponseDto> getRegularDonationsByCategory(@RequestParam(value = "name") List<String> categories) {
+    public List<SimpleDonationResponseDto> getRegularDonationsByCategory(@RequestParam(value = "name") List<String> categories) {
         return regularDonationService.getRegularDonationsByCategory(categories);
     }
 }

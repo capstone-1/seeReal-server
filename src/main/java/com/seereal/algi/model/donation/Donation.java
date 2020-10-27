@@ -15,7 +15,7 @@ import java.util.List;
 public class Donation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "regular_donation_id")
+    @Column(name = "donation_id")
     private Long id;
     @Column(unique = true)
     private String name;
@@ -27,15 +27,15 @@ public class Donation {
     private String introduction;
     private String plan;
 
-    @OneToMany(mappedBy = "regularDonation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "donation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DonationCostPreview> costPreviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "regularDonation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "donation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DonationResult> results = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "regular_donation_category",
-            joinColumns = @JoinColumn(name = "regular_donation_id"),
+    @JoinTable(name = "donation_category",
+            joinColumns = @JoinColumn(name = "donation_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories = new ArrayList<>();
 

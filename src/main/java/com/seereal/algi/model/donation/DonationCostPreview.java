@@ -18,7 +18,7 @@ public class DonationCostPreview {
     private Integer cost;
     private String etc;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "regular_donation_id")
+    @JoinColumn(name = "donation_id")
     private Donation donation;
 
     @Builder
