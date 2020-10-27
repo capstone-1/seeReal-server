@@ -55,6 +55,9 @@ public class RegularDonationController {
         return ResponseEntity.ok(regularDonationService.findDonationResultByNameAndQuater(name, quarter));
     }
 
-
-
+    // 승인된 정기 기부 검색 (검색 조건 : 카테고리)
+    @GetMapping("regular-donation/category")
+    public List<DetailRegularDonationResponseDto> getRegularDonationsByCategory(@RequestParam(value = "name") List<String> categories) {
+        return regularDonationService.getRegularDonationsByCategory(categories);
+    }
 }

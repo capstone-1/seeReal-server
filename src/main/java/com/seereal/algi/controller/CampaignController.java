@@ -68,4 +68,10 @@ public class CampaignController {
     public OrgCampaignReviewResponseDto addOrganizationReview(@PathVariable("campaignName") String campaignName, @RequestBody OrgCampaignReviewRequestDto requestDto) {
         return campaignService.addOrganizationReview(campaignName, requestDto);
     }
+
+    // 승인된 캠페인 조회 (검색 조건 : 카테고리)
+    @GetMapping("/campaign/category")
+    public List<CampaignDetailsResponseDto> getCampaignsByCategory(@RequestParam(value = "name") List<String> categories) {
+       return campaignService.getCampaignByCategories(categories);
+    }
 }

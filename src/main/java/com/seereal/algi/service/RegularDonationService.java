@@ -1,17 +1,22 @@
 package com.seereal.algi.service;
 
 import com.seereal.algi.config.constant.S3Constants;
+import com.seereal.algi.dto.registeredCampaign.CampaignDetailsResponseDto;
 import com.seereal.algi.dto.regularDonation.*;
 import com.seereal.algi.model.category.Category;
 import com.seereal.algi.model.category.CategoryRepository;
+import com.seereal.algi.model.registeredCampaign.RegisteredCampaign;
 import com.seereal.algi.model.regularDonation.*;
 import com.seereal.algi.service.util.S3Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.soap.Detail;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.seereal.algi.config.constant.S3Constants.REGULAR_DONATION_IMAGE;
@@ -116,5 +121,17 @@ public class RegularDonationService {
                 .quarter(result.getQuarter())
                 .costResult(resultDtos)
                 .build();
+    }
+
+    public List<DetailRegularDonationResponseDto> getRegularDonationsByCategory(List<String> categories) {
+        List<Category> categoryList = categories.stream()
+                .map(this::convertToCategory)
+                .collect(Collectors.toList());
+
+        Set<RegularDonation> regularDonations = new HashSet<>();
+        for (Category category : categoryList) {
+            categoryRepository.findByName(category.getName()).ifPresent(c -> regularDonations.addAll(c.getRegularDonations()));
+        }
+        return regularDonations.stream().map(DetailRegularDonationResponseDto::convertToDto).collect(Collectors.toList());
     }
 }

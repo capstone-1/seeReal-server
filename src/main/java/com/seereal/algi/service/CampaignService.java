@@ -18,10 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -144,9 +141,21 @@ public class CampaignService {
         return new OrgCampaignReviewResponseDto(presignedUrlForItemReceipt.toExternalForm(), presignedUrlForWorkReceipt.toExternalForm());
     }
 
+    public List<CampaignDetailsResponseDto> getCampaignByCategories(List<String> categories) {
+        List<Category> categoryList = categories.stream()
+                                                .map(this::convertToCategory)
+                                                .collect(Collectors.toList());
+        Set<RegisteredCampaign> campaigns = new HashSet<>();
+        for (Category category : categoryList) {
+            categoryRepository.findByName(category.getName()).ifPresent(c -> campaigns.addAll(c.getRegisteredCampaigns()));
+        }
+        return campaigns.stream().filter(RegisteredCampaign::getIsApprove).map(CampaignDetailsResponseDto::convertToDto).collect(Collectors.toList());
+    }
+
     private List<Category> getCategories(List<String> categoryNames) {
         return categoryNames.stream().map(this::convertToCategory).collect(Collectors.toList());
     }
+
     private Category convertToCategory(String categoryName) {
         return categoryRepository.findByName(categoryName).orElseThrow(() -> new NoSuchElementException("Invalid Category Name!"));
     }
