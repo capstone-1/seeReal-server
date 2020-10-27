@@ -20,7 +20,7 @@ public class DonationResult {
     private Integer quarter;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "regular_donation_id")
+    @JoinColumn(name = "donation_id")
     private Donation donation;
 
     @OneToMany(mappedBy = "donationResult", cascade = CascadeType.ALL, orphanRemoval = true)
