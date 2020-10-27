@@ -212,7 +212,9 @@ public class OrganizationService {
     public String findPassword(String registerNumber) {
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                 .orElseThrow(() -> new IllegalArgumentException("기관 정보가 존재하지 않습니다."));
-        organization.setPassword(passwordEncoder.encode(RandomStringUtils.randomAlphanumeric(10)));
-        return organizationRepository.save(organization).getPassword();
+        String randNum = RandomStringUtils.randomAlphanumeric(10);
+        organization.setPassword(passwordEncoder.encode(randNum));
+        organizationRepository.save(organization);
+        return randNum;
     }
 }
