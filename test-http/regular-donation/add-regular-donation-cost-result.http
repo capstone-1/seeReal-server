@@ -1,1 +1,1 @@
-POST http://localhost:8080/regular-donation/cost/upload?name=name&quarter=4Content-Type: application/json{  "name": "name",  "targetNum": 3,  "cost": 2000,  "etc": "hello"}###
+POST http://localhost:8080/regular-donation/cost/upload/1?quarter=4Content-Type: application/json{  "name": "name",  "targetNum": 3,  "cost": 2000,  "etc": "hello"}###
