@@ -19,6 +19,7 @@ public class RegularDonationSaveRequestDto {
     private String content;
     private String introduction;
     private String plan;
+    private List<String> categories = new ArrayList<>();
     private List<DonationCostPreviewRequestDto> costPreviews = new ArrayList<>();
 
     public static RegularDonation convertToEntity(RegularDonationSaveRequestDto dto) {

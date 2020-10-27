@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface RegularDonationRepository extends JpaRepository<RegularDonation, Long> {
-    Optional<RegularDonation> findByName(String naem);
+    Optional<RegularDonation> findByName(String name);
 }

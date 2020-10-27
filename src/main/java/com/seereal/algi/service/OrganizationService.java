@@ -57,7 +57,7 @@ public class OrganizationService {
     private final S3Util s3Util;
 
     public String getPresignedUrlForBusinessReport(String registerNumber) {
-        URL presignedUrl = s3Util.getPresignedUrl(registerNumber, BUSINESS_REPORT_NAME);
+        URL presignedUrl = s3Util.getPresignedUrlForOrganization(registerNumber, BUSINESS_REPORT_NAME);
         //DB 저장
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                                                             .orElseThrow(() -> new IllegalArgumentException("Organization Not Found!"));
@@ -68,7 +68,7 @@ public class OrganizationService {
     }
 
     public String getPresignedUrlForTaxReport(String registerNumber) {
-        URL presignedUrl = s3Util.getPresignedUrl(registerNumber, TAX_REPORT_NAME);
+        URL presignedUrl = s3Util.getPresignedUrlForOrganization(registerNumber, TAX_REPORT_NAME);
         //DB 저장
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                                                             .orElseThrow(() -> new IllegalArgumentException("Organization Not Found!"));
