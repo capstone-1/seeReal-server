@@ -1,17 +1,14 @@
 package com.seereal.algi.service;
 
 import com.seereal.algi.config.constant.S3Constants;
-import com.seereal.algi.dto.registeredCampaign.CampaignDetailsResponseDto;
-import com.seereal.algi.dto.regularDonation.*;
+import com.seereal.algi.dto.donation.*;
 import com.seereal.algi.model.category.Category;
 import com.seereal.algi.model.category.CategoryRepository;
-import com.seereal.algi.model.registeredCampaign.RegisteredCampaign;
-import com.seereal.algi.model.regularDonation.*;
+import com.seereal.algi.model.donation.*;
 import com.seereal.algi.service.util.S3Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.soap.Detail;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
@@ -19,12 +16,12 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.seereal.algi.config.constant.S3Constants.REGULAR_DONATION_IMAGE;
+import static com.seereal.algi.config.constant.S3Constants.DONATION_IMAGE;
 
 @Service
 public class RegularDonationService {
     @Autowired
-    private RegularDonationRepository regularDonationRepository;
+    private DonationRepository donationRepository;
     @Autowired
     private DonationCostPreviewRepository donationCostPreviewRepository;
     @Autowired
@@ -36,14 +33,12 @@ public class RegularDonationService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public String saveRegularDonation(RegularDonationSaveRequestDto requestDto) {
-        RegularDonation donation = RegularDonationSaveRequestDto.convertToEntity(requestDto);
-        regularDonationRepository.save(donation);
-        URL presignedUrl = s3Util.getPresignedUrlForRegularDonation(donation.getName(),REGULAR_DONATION_IMAGE);
-        donation.setProfileUrl(s3Util.parseS3Url(presignedUrl));
+    public String saveRegularDonation(DonationSaveRequestDto requestDto) {
+        Donation donation = DonationSaveRequestDto.convertToEntity(requestDto);
+        Long id = donationRepository.save(donation).getId();
         requestDto.getCostPreviews().stream().map(DonationCostPreviewRequestDto::convertToEntity)
                 .forEach(r -> {
-                    r.setRegularDonation(donation);
+                    r.setDonation(donation);
                     donationCostPreviewRepository.save(r);
                 });
 
@@ -53,20 +48,20 @@ public class RegularDonationService {
                     c.addRegularDonation(donation);
                     categoryRepository.save(c);
                 });
+
+        URL presignedUrl = s3Util.getPresignedUrlForRegularDonation(id, DONATION_IMAGE);
         return presignedUrl.toExternalForm();
+    } // 조회시 조회용 url 발급 필요
+
+    public List<SimpleDonationResponseDto> getRegularDonationList() {
+        return donationRepository.findAll().stream().map(SimpleDonationResponseDto::new).collect(Collectors.toList());
     }
 
-    public List<SimpleRegularDonationResponseDto> getRegularDonationList() {
-        return regularDonationRepository.findAll().stream().map(r -> SimpleRegularDonationResponseDto.builder()
-                                                                                            .name(r.getName())
-                                                                                            .registrant(r.getRegistrant())
-                                                                                            .build()).collect(Collectors.toList());
-    }
-
-    public DetailRegularDonationResponseDto getRegularDonationDetail(String name) {
-        return DetailRegularDonationResponseDto.convertToDto(regularDonationRepository.findByName(name)
-                                                                .orElseThrow(() -> new NoSuchElementException("Regualr Donation doesn't exist!")));
-
+    public DetailDonationResponseDto getRegularDonationDetail(Long id) {
+        Donation donation = donationRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("No Donation"));
+        donation.setProfileUrl(s3Util.generateURL(S3Constants.DONATION_PREFIX, String.valueOf(id), DONATION_IMAGE));
+        return DetailDonationResponseDto.convertToDto(donationRepository.save(donation));
     }
 
     private Category convertToCategory(String categoryName) {
@@ -74,21 +69,21 @@ public class RegularDonationService {
     }
 
     // 정기기부 결과 등록
-    public void saveDonationResult(DonationResultDto.Request requestDto, String name) {
+    public void saveDonationResult(DonationResultDto.Request requestDto, Long id) {
         DonationResult result = requestDto.convertToEntity();
-        RegularDonation regularDonation = regularDonationRepository.findByName(name)
+        Donation donation = donationRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 등록자 정보가 없습니다."));
-        result.setRegularDonation(regularDonation);
+        result.setDonation(donation);
         donationResultRepository.save(result);
     }
 
     // 정기기부 결과의 지출내역 등록
-    public void saveDonationCostResult(DonationCostResultDto.Request requestDto, String name, Integer quarter) {
+    public void saveDonationCostResult(DonationCostResultDto.Request requestDto, Long id, Integer quarter) {
         DonationCostResult costResult = requestDto.convertToEntity();
 
-        RegularDonation regularDonation = regularDonationRepository.findByName(name)
+        Donation donation = donationRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 등록자 정보가 없습니다."));
-        List<DonationResult> results = regularDonation.getResults();
+        List<DonationResult> results = donation.getResults();
 
         // 도네이션 정보로부터 도네이션 리저트 획득 -> 입력받은 quater로 필터링
         DonationResult result = results.stream()
@@ -104,10 +99,10 @@ public class RegularDonationService {
     }
 
     // 한 정기기부의 특정 분기에 대한 결과 내역을 조회한다.
-    public DonationResultDto.Response findDonationResultByNameAndQuater(String name, Integer quarter) {
-        RegularDonation regularDonation = regularDonationRepository.findByName(name)
+    public DonationResultDto.Response findDonationResultByNameAndQuater(Long id, Integer quarter) {
+        Donation donation = donationRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 등록자 정보가 없습니다."));
-        List<DonationResult> results = regularDonation.getResults();
+        List<DonationResult> results = donation.getResults();
 
         // 도네이션 정보로부터 도네이션 리저트 획득 -> 입력받은 quater로 필터링
         DonationResult result = results.stream()
@@ -123,15 +118,15 @@ public class RegularDonationService {
                 .build();
     }
 
-    public List<DetailRegularDonationResponseDto> getRegularDonationsByCategory(List<String> categories) {
+    public List<DetailDonationResponseDto> getRegularDonationsByCategory(List<String> categories) {
         List<Category> categoryList = categories.stream()
                 .map(this::convertToCategory)
                 .collect(Collectors.toList());
 
-        Set<RegularDonation> regularDonations = new HashSet<>();
+        Set<Donation> regularDonations = new HashSet<>();
         for (Category category : categoryList) {
-            categoryRepository.findByName(category.getName()).ifPresent(c -> regularDonations.addAll(c.getRegularDonations()));
+            categoryRepository.findByName(category.getName()).ifPresent(c -> regularDonations.addAll(c.getDonations()));
         }
-        return regularDonations.stream().map(DetailRegularDonationResponseDto::convertToDto).collect(Collectors.toList());
+        return regularDonations.stream().map(DetailDonationResponseDto::convertToDto).collect(Collectors.toList());
     }
 }

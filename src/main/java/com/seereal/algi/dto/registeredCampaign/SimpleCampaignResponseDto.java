@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class SimpleCampaignResponseDto {
+    private Long id;
     private String name;
     private String registrant;
 
     @Builder
-    public SimpleCampaignResponseDto(String name, String registrant) {
+    public SimpleCampaignResponseDto(Long id, String name, String registrant) {
+        this.id = id;
         this.name = name;
         this.registrant = registrant;
     }

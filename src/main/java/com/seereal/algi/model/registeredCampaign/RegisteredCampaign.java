@@ -96,7 +96,7 @@ public class RegisteredCampaign {
     public void setApprove() {
         this.isApprove = true;
     }
-    public void setCampaignImageUrl(String url) {
+    public void setCampaignImage(String url) {
         this.campaignImage = url;
     }
 }
