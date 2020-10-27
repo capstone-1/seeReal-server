@@ -26,6 +26,7 @@ public class RegularDonation {
     private String content;
     private String introduction;
     private String plan;
+
     @OneToMany(mappedBy = "regularDonation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DonationCostPreview> costPreviews = new ArrayList<>();
 

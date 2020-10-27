@@ -132,9 +132,9 @@ public class CampaignService {
                 .orElseThrow(() -> new NoSuchElementException("Invalid Category Name!"));
         OrganizationCampignReview review = OrgCampaignReviewRequestDto.convertToEntity(requestDto);
 
-        URL presignedUrlForWorkReceipt = s3Util.getPresignedUrlForCampaign(campaignName, S3Constants.CAMPAIGN_WORK_RECIEPT);
+        URL presignedUrlForWorkReceipt = s3Util.getPresignedUrlForCampaign(campaignName, S3Constants.CAMPAIGN_WORK_RECEIPT);
         review.setWorkReceiptUrl(s3Util.parseS3Url(presignedUrlForWorkReceipt));
-        URL presignedUrlForItemReceipt = s3Util.getPresignedUrlForCampaign(campaignName, S3Constants.CAMPAIGN_ITEM_RECIEPT);
+        URL presignedUrlForItemReceipt = s3Util.getPresignedUrlForCampaign(campaignName, S3Constants.CAMPAIGN_ITEM_RECEIPT);
         review.setItemReceiptUrl(s3Util.parseS3Url(presignedUrlForItemReceipt));
 
         campaign.addOrganizationReview(review);

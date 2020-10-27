@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 import java.net.URL;
 import java.util.Date;
 
-import static com.seereal.algi.config.constant.S3Constants.BUCKET_NAME;
-import static com.seereal.algi.config.constant.S3Constants.CAMPAIGN_PREFIX;
+import static com.seereal.algi.config.constant.S3Constants.*;
 
 @Component
 @RequiredArgsConstructor
@@ -22,6 +21,14 @@ public class S3Util {
 
     public String parseS3Url(URL presignedUrl) {
         return presignedUrl.getProtocol() + "://" + presignedUrl.getHost() + presignedUrl.getPath();
+    }
+
+    public URL getPresignedUrlForDonation(String donationName, String fileType) {
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(BUCKET_NAME,  DONATION_PREFIX+ donationName + fileType)
+                .withMethod(HttpMethod.PUT)
+                .withExpiration(getExpiration());
+        generatePresignedUrlRequest.addRequestParameter(Headers.S3_CANNED_ACL, CannedAccessControlList.PublicRead.toString());
+        return s3Client.generatePresignedUrl(generatePresignedUrlRequest);
     }
 
     public URL getPresignedUrlForCampaign(String campaignName, String fileType) {

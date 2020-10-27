@@ -1,0 +1,1 @@
+POST http://localhost:8080/regular-donation/result/upload?name=nameContent-Type: application/json{  "content": "content",  "quarter": 4}###

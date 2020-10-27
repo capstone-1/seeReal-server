@@ -12,7 +12,7 @@ public class DonationCostPreviewRequestDto {
     private Integer cost;
     private String etc;
 
-    public static DonationCostPreview convertToentity(DonationCostPreviewRequestDto dto) {
+    public static DonationCostPreview convertToEntity(DonationCostPreviewRequestDto dto) {
         return DonationCostPreview.builder()
                 .cost(dto.getCost())
                 .name(dto.getName())
