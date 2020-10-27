@@ -40,15 +40,15 @@ public class CampaignController {
     }
 
     //캠페인 상세정보 조회
-    @GetMapping("/campaign/{campaignName}")
-    public CampaignDetailsResponseDto getCampaignDetails(@PathVariable("campaignName") String campaignName) {
-        return campaignService.getCampaignDetails(campaignName);
+    @GetMapping("/campaign/{id}")
+    public CampaignDetailsResponseDto getCampaignDetails(@PathVariable("id") Long id) {
+        return campaignService.getCampaignDetails(id);
     }
 
     //캠페인 승인 (단체)
-    @PutMapping("/campaign/approve/{campaignName}")
-    public CampaignDetailsResponseDto approveCampaign(@PathVariable("campaignName") String campaignName) {
-        return campaignService.approveCampaign(campaignName);
+    @PutMapping("/campaign/approve/{id}")
+    public CampaignDetailsResponseDto approveCampaign(@PathVariable("id") Long id) {
+        return campaignService.approveCampaign(id);
     }
 
     //제안된 캠페인 등록 - 반환값은 이미지 upload url
@@ -58,14 +58,14 @@ public class CampaignController {
     }
 
     // 개인 캠페인 후기 등록
-    @PostMapping("/campaign/personal-review/{campaignName}")
-    public CampaignDetailsResponseDto addPersonalReview(@PathVariable("campaignName") String campaignName, @RequestBody String personalReview) {
-        return campaignService.addPersonalReview(campaignName,personalReview);
+    @PostMapping("/campaign/personal-review/{id}")
+    public CampaignDetailsResponseDto addPersonalReview(@PathVariable("id") Long id, @RequestBody String personalReview) {
+        return campaignService.addPersonalReview(id, personalReview);
     }
 
     // 기업 캠페인 후기 등록
-    @PostMapping("campaign/organization-review/{campaignName}")
-    public OrgCampaignReviewResponseDto addOrganizationReview(@PathVariable("campaignName") String campaignName, @RequestBody OrgCampaignReviewRequestDto requestDto) {
-        return campaignService.addOrganizationReview(campaignName, requestDto);
+    @PostMapping("campaign/organization-review/{id}")
+    public OrgCampaignReviewResponseDto addOrganizationReview(@PathVariable("id") Long id, @RequestBody OrgCampaignReviewRequestDto requestDto) {
+        return campaignService.addOrganizationReview(id, requestDto);
     }
 }

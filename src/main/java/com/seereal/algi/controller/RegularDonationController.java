@@ -1,9 +1,9 @@
 package com.seereal.algi.controller;
-import com.seereal.algi.dto.regularDonation.DonationCostResultDto;
-import com.seereal.algi.dto.regularDonation.DonationResultDto;
-import com.seereal.algi.dto.regularDonation.DetailRegularDonationResponseDto;
-import com.seereal.algi.dto.regularDonation.RegularDonationSaveRequestDto;
-import com.seereal.algi.dto.regularDonation.SimpleRegularDonationResponseDto;
+import com.seereal.algi.dto.donation.DonationCostResultDto;
+import com.seereal.algi.dto.donation.DonationResultDto;
+import com.seereal.algi.dto.donation.DetailDonationResponseDto;
+import com.seereal.algi.dto.donation.DonationSaveRequestDto;
+import com.seereal.algi.dto.donation.SimpleDonationResponseDto;
 import com.seereal.algi.service.RegularDonationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,41 +18,41 @@ public class RegularDonationController {
     private RegularDonationService regularDonationService;
     // 정기기부 등록
     @PostMapping("/regular-donation")
-    public String saveRegularDonation(@RequestBody RegularDonationSaveRequestDto requestDto) {
+    public String saveRegularDonation(@RequestBody DonationSaveRequestDto requestDto) {
         return regularDonationService.saveRegularDonation(requestDto);
     }
 
     //정기기부 목록 조회
     @GetMapping("/regular-donation")
-    public List<SimpleRegularDonationResponseDto> getRegularDonationList() {
+    public List<SimpleDonationResponseDto> getRegularDonationList() {
         return regularDonationService.getRegularDonationList();
     }
     //정기기부 상세 조회
-    @GetMapping("/regular-donation/{name}")
-    public DetailRegularDonationResponseDto getRegularDonationDetail(@PathVariable String name) {
-        return regularDonationService.getRegularDonationDetail(name);
+    @GetMapping("/regular-donation/{id}")
+    public DetailDonationResponseDto getRegularDonationDetail(@PathVariable Long id) {
+        return regularDonationService.getRegularDonationDetail(id);
     }
 
     //정기기부 분기별 결과 등록
-    @PostMapping("/regular-donation/result/upload")
+    @PostMapping("/regular-donation/result/upload/{id}")
     public void saveRegularDonationResult(@RequestBody DonationResultDto.Request request,
-                                          @RequestParam("name") String name) {
-        regularDonationService.saveDonationResult(request, name);
+                                          @PathVariable("id") Long id) {
+        regularDonationService.saveDonationResult(request, id);
     }
 
     //정기기부 분기별 결과 내 지출내역 등록
-    @PostMapping("/regular-donation/cost/upload")
+    @PostMapping("/regular-donation/cost/upload/{id}")
     public void saveRegularDonationCostResult(@RequestBody DonationCostResultDto.Request request,
-                                              @RequestParam("name") String name,
+                                              @PathVariable("name") Long id,
                                               @RequestParam("quarter") Integer quarter) {
-        regularDonationService.saveDonationCostResult(request, name, quarter);
+        regularDonationService.saveDonationCostResult(request, id, quarter);
     }
 
     //정기기부 분기별 결과 조회
-    @GetMapping("/regular-donation/result/search")
-    public ResponseEntity<DonationResultDto.Response> findRegularDonationResult(@PathParam("name") String name,
+    @GetMapping("/regular-donation/result/search/{id}")
+    public ResponseEntity<DonationResultDto.Response> findRegularDonationResult(@PathVariable("id") Long id,
                                                     @PathParam("quarter") Integer quarter) {
-        return ResponseEntity.ok(regularDonationService.findDonationResultByNameAndQuater(name, quarter));
+        return ResponseEntity.ok(regularDonationService.findDonationResultByNameAndQuater(id, quarter));
     }
 
 

@@ -23,6 +23,10 @@ public class S3Util {
         return presignedUrl.getProtocol() + "://" + presignedUrl.getHost() + presignedUrl.getPath();
     }
 
+    public String generateURL(String prefix, String id, String key) {
+        return String.format("https://capstone-seereal.s3.ap-northeast-2.amazonaws.com/%s%s%s", prefix, id, key);
+    }
+
     public URL getPresignedUrlForDonation(String donationName, String fileType) {
         GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(BUCKET_NAME,  DONATION_PREFIX+ donationName + fileType)
                 .withMethod(HttpMethod.PUT)
@@ -31,16 +35,16 @@ public class S3Util {
         return s3Client.generatePresignedUrl(generatePresignedUrlRequest);
     }
 
-    public URL getPresignedUrlForCampaign(String campaignName, String fileType) {
-        return getPresignedUrl(CAMPAIGN_PREFIX + campaignName + fileType);
+    public URL getPresignedUrlForCampaign(Long id, String fileType) {
+        return getPresignedUrl(CAMPAIGN_PREFIX + id + fileType);
     }
 
-    public URL getPresignedUrlForRegularDonation(String regularDonationName, String fileType) {
-        return getPresignedUrl(REGULAR_DONATION_PREFIX + regularDonationName + fileType);
+    public URL getPresignedUrlForRegularDonation(Long id, String fileType) {
+        return getPresignedUrl(DONATION_PREFIX + id + fileType);
     }
 
-    public URL getPresignedUrlForOrganization(String organizationName, String reportType) {
-        return getPresignedUrl(organizationName + reportType);
+    public URL getPresignedUrlForOrganization(String registerNumber, String reportType) {
+        return getPresignedUrl(registerNumber + reportType);
     }
 
     private URL getPresignedUrl(String key) {

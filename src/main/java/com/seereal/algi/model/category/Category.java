@@ -1,7 +1,7 @@
 package com.seereal.algi.model.category;
 
 import com.seereal.algi.model.registeredCampaign.RegisteredCampaign;
-import com.seereal.algi.model.regularDonation.RegularDonation;
+import com.seereal.algi.model.donation.Donation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,12 +21,12 @@ public class Category {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
     private List<RegisteredCampaign> registeredCampaigns = new ArrayList<>();
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
-    private List<RegularDonation> regularDonations = new ArrayList<>();
+    private List<Donation> donations = new ArrayList<>();
 
     public void addRegisteredCampaign(RegisteredCampaign registeredCampaign){
         this.registeredCampaigns.add(registeredCampaign);
     }
-    public void addRegularDonation(RegularDonation regularDonation) {
-        this.regularDonations.add(regularDonation);
+    public void addRegularDonation(Donation donation) {
+        this.donations.add(donation);
     }
 }

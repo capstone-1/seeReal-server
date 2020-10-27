@@ -16,6 +16,8 @@ import com.seereal.algi.service.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,20 +35,19 @@ public class CampaignService {
     private final SuggestedCampaignRepository suggestedCampaignRepository;
     private final PersonalCampaignReviewRepository personalCampaignReviewRepository;
     private final OrganizationCampaignReviewRepository organizationCampaignReviewRepository;
-    private final ModelMapper modelMapper;
     private final S3Util s3Util;
 
     public String saveCampaign(List<Category> categories, RegisteredCampaign registeredCampaign) {
-        URL presignedUrl = s3Util.getPresignedUrlForCampaign(registeredCampaign.getCampaignName(), S3Constants.CAMPAIGN_IMAGE);
-        registeredCampaign.setCampaignImageUrl(s3Util.parseS3Url(presignedUrl));
         // save
         for (Category category : categories) {
             registeredCampaign.addCategory(category);
             category.addRegisteredCampaign(registeredCampaign);
             categoryRepository.save(category);
         }
-        registeredCampaignRepository.save(registeredCampaign);
+        Long id = registeredCampaignRepository.save(registeredCampaign).getId();
 
+        URL presignedUrl = s3Util.getPresignedUrlForCampaign(id, S3Constants.CAMPAIGN_IMAGE);
+//        registeredCampaign.setCampaignImageUrl(s3Util.parseS3Url(presignedUrl));
         return presignedUrl.toExternalForm();
     }
 
@@ -105,20 +106,23 @@ public class CampaignService {
                                             .collect(Collectors.toList());
     }
 
-    public CampaignDetailsResponseDto getCampaignDetails(String campaignName) {
-        return CampaignDetailsResponseDto.convertToDto(registeredCampaignRepository.findByCampaignName(campaignName)
-                                            .orElseThrow(() -> new NoSuchElementException("No Campaign Details")));
+    @Transactional
+    public CampaignDetailsResponseDto getCampaignDetails(Long id) {
+        RegisteredCampaign registeredCampaign = registeredCampaignRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("No Campaign Details"));
+        registeredCampaign.setCampaignImage(s3Util.generateURL(S3Constants.CAMPAIGN_PREFIX, String.valueOf(id), S3Constants.CAMPAIGN_IMAGE));
+        return CampaignDetailsResponseDto.convertToDto(registeredCampaignRepository.save(registeredCampaign));
     }
 
-    public CampaignDetailsResponseDto approveCampaign(String campaignName) {
-        RegisteredCampaign campaign = registeredCampaignRepository.findByCampaignName(campaignName)
+    public CampaignDetailsResponseDto approveCampaign(Long id) {
+        RegisteredCampaign campaign = registeredCampaignRepository.findById(id)
                                                                     .orElseThrow(() -> new NoSuchElementException("Invalid Category Name!"));
         campaign.setApprove();
         return CampaignDetailsResponseDto.convertToDto(registeredCampaignRepository.save(campaign));
     }
 
-    public CampaignDetailsResponseDto addPersonalReview(String campaignName, String personalReview) {
-        RegisteredCampaign campaign = registeredCampaignRepository.findByCampaignName(campaignName)
+    public CampaignDetailsResponseDto addPersonalReview(Long id, String personalReview) {
+        RegisteredCampaign campaign = registeredCampaignRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Invalid Category Name!"));
         PersonalCampaignReview review =  new PersonalCampaignReview(personalReview);
         campaign.addPersonalReview(review);
@@ -127,14 +131,14 @@ public class CampaignService {
         return CampaignDetailsResponseDto.convertToDto(registeredCampaignRepository.save(campaign));
     }
 
-    public OrgCampaignReviewResponseDto addOrganizationReview(String campaignName, OrgCampaignReviewRequestDto requestDto) {
-        RegisteredCampaign campaign = registeredCampaignRepository.findByCampaignName(campaignName)
+    public OrgCampaignReviewResponseDto addOrganizationReview(Long id, OrgCampaignReviewRequestDto requestDto) {
+        RegisteredCampaign campaign = registeredCampaignRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Invalid Category Name!"));
         OrganizationCampignReview review = OrgCampaignReviewRequestDto.convertToEntity(requestDto);
 
-        URL presignedUrlForWorkReceipt = s3Util.getPresignedUrlForCampaign(campaignName, S3Constants.CAMPAIGN_WORK_RECEIPT);
+        URL presignedUrlForWorkReceipt = s3Util.getPresignedUrlForCampaign(id, S3Constants.CAMPAIGN_WORK_RECEIPT);
         review.setWorkReceiptUrl(s3Util.parseS3Url(presignedUrlForWorkReceipt));
-        URL presignedUrlForItemReceipt = s3Util.getPresignedUrlForCampaign(campaignName, S3Constants.CAMPAIGN_ITEM_RECEIPT);
+        URL presignedUrlForItemReceipt = s3Util.getPresignedUrlForCampaign(id, S3Constants.CAMPAIGN_ITEM_RECEIPT);
         review.setItemReceiptUrl(s3Util.parseS3Url(presignedUrlForItemReceipt));
 
         campaign.addOrganizationReview(review);
