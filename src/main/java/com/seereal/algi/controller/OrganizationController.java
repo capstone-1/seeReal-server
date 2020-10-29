@@ -42,7 +42,8 @@ public class OrganizationController {
     }
 
     @PostMapping("/upload/tax-income")
-    public ResponseEntity<?> uploadTaxIncome(@RequestBody TaxIncomeSummaryRequestDto requestDto){
+    public ResponseEntity<?> uploadTaxIncome(@RequestBody TaxIncomeSummaryRequestDto requestDto, @RequestHeader("Authorization") String header){
+        System.out.println(header + "\n\n\n");
         return ResponseEntity.ok(organizationService.saveTaxIncome(requestDto, "12345678"));
     }
 
