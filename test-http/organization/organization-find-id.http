@@ -1,1 +1,1 @@
-GET http://localhost:8080/find/register-number?email=email.com&name=testName###
+GET http://localhost:8080/organization/find/register-number?email=email.com&name=testName###
