@@ -42,14 +42,24 @@ public class OrganizationController {
     }
 
     @PostMapping("/upload/tax-income")
-    public ResponseEntity<?> uploadTaxIncome(@RequestBody TaxIncomeSummaryRequestDto requestDto){
+    public ResponseEntity<?> uploadTaxIncome(@RequestBody TaxIncomeSummaryRequestDto requestDto) {
         return ResponseEntity.ok(organizationService.saveTaxIncome(requestDto, "12345678"));
     }
+//    public ResponseEntity<?> uploadTaxIncome(@RequestBody TaxIncomeSummaryRequestDto requestDto, Authentication authentication){
+//        JwtPostAuthorizationToken token = (JwtPostAuthorizationToken) authentication;
+//        System.out.println(token.getOrganizationContext().getUsername());
+//        return ResponseEntity.ok(organizationService.saveTaxIncome(requestDto, token.getOrganizationContext().getUsername()));
+//    }
 
     @PostMapping("/upload/tax-outcome")
-    public ResponseEntity<?> uploadCampaign(@RequestBody TaxOutcomeSummaryRequestDto requestDto){
+    public ResponseEntity<?> uploadCampaign(@RequestBody TaxOutcomeSummaryRequestDto requestDto) {
         return ResponseEntity.ok(organizationService.saveTaxOutcome(requestDto, "12345678"));
     }
+//    public ResponseEntity<?> uploadCampaign(@RequestBody TaxOutcomeSummaryRequestDto requestDto, Authentication authentication){
+//        JwtPostAuthorizationToken token = (JwtPostAuthorizationToken) authentication;
+//        System.out.println(token.getOrganizationContext().getUsername());
+//        return ResponseEntity.ok(organizationService.saveTaxOutcome(requestDto, token.getOrganizationContext().getUsername()));
+//    }
 
     @PostMapping("/upload/activity")
     public ResponseEntity<?> uploadActivity(@RequestBody ActivityDto.RequestList requestDto){

@@ -1,0 +1,26 @@
+POST http://localhost:8080/campaign/suggest
+Content-Type: application/json
+
+{
+   "campaignName": "suggested-campaign",
+   "categories": "A, B, C",
+   "introduction": "intro",
+   "startDate": "2020-10-01",
+   "endDate": "2020-10-01",
+   "targetAmount": 20000,
+   "target": "target",
+   "targetNumber": 12,
+   "explanation": "explain",
+   "workName": "work",
+   "workFee": 100,
+   "workEtc": "etc",
+   "itemName": "item",
+   "itemNumber": 13,
+   "itemShop": "shop",
+   "itemFee": 200,
+   "motivation": "mot",
+   "hasReception": true,
+   "hasReview": false
+}
+
+###

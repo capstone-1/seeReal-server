@@ -29,11 +29,11 @@ public class OrganizationLoginProvider implements AuthenticationProvider {
         String registerNumber = token.getUser();
         String password = token.getPassword();
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
-                                                            .orElseThrow(() -> new NoSuchElementException("Register Number Not Found!"));
+                                                            .orElseThrow(() -> new AuthenticationServiceException("Register Number Not Found!"));
         if (isCorrectPassword(password, organization)) {
             return LoginPostAuthorizationToken.getTokenFromOrganizationContext(OrganizationContext.fromOrganizationModel(organization));
         }
-        throw new AuthenticationServiceException("hello");
+        throw new AuthenticationServiceException("Invalid Password!");
     }
 
     @Override

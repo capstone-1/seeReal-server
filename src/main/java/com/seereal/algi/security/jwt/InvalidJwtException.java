@@ -1,6 +1,8 @@
 package com.seereal.algi.security.jwt;
 
-public class InvalidJwtException extends RuntimeException{
+import org.springframework.security.authentication.AuthenticationServiceException;
+
+public class InvalidJwtException extends AuthenticationServiceException {
     public InvalidJwtException(String message) {
         super(message);
     }

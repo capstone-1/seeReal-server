@@ -1,1 +1,1 @@
-GET http://localhost:8080/find/password?registerNumber=11111111###
+GET http://localhost:8080/organization/find/password?registerNumber=11111111###
