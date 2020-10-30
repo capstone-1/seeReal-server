@@ -1,0 +1,22 @@
+POST http://localhost:8080/organization/upload/tax-income
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjYXBzdG9uZSIsIklEIjoiMTExMTExMTEiLCJVU0VSX1JPTEUiOiJBR0VOQ1kiLCJleHAiOjE2MDQwNzA2MzIsIk5BTUUiOiJ0ZXN0TmFtZSJ9.TKNPRfd4uRZYG3avcFdWACbFLnL-kf1V5yraXu8AJl8
+Content-Type: application/json
+
+{
+  "carriedAmount": 1,
+  "personalDonation": 2,
+  "corporateDonation": 3,
+  "ngoDonation": 4,
+  "itemDonation": 5,
+  "etcDonation": 6,
+  "supportFund": 7,
+  "grantFund": 8,
+  "otherFund": 9,
+  "etcBusinessProfit": 10,
+  "interestProfit": 11,
+  "conversionProfit": 12,
+  "exchangeProfit": 13,
+  "etcNonBusinessProfit": 14
+}
+
+###
