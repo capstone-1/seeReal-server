@@ -1,8 +1,8 @@
 package com.seereal.algi.controller;
 
-import com.seereal.algi.dto.activity.ActivityRequestDto;
-import com.seereal.algi.dto.campaign.CampaginRequestDto;
-import com.seereal.algi.dto.campaigncost.CampaignCostRequestDto;
+import com.seereal.algi.dto.activity.ActivityDto;
+import com.seereal.algi.dto.campaign.CampaignDto;
+import com.seereal.algi.dto.campaigncost.CampaignCostDto;
 import com.seereal.algi.dto.organization.OrganizationSignUpRequestDto;
 import com.seereal.algi.dto.taxincome.TaxIncomeSummaryRequestDto;
 import com.seereal.algi.dto.taxoutcome.TaxOutcomeSummaryRequestDto;
@@ -52,17 +52,17 @@ public class OrganizationController {
     }
 
     @PostMapping("/upload/activity")
-    public ResponseEntity<?> uploadActivity(@RequestBody ActivityRequestDto requestDto){
+    public ResponseEntity<?> uploadActivity(@RequestBody ActivityDto.RequestList requestDto){
         return ResponseEntity.ok(organizationService.saveActivity(requestDto, "12345678"));
     }
 
     @PostMapping("/upload/campaign")
-    public ResponseEntity<?> uploadCampaign(@RequestBody CampaginRequestDto requestDto){
+    public ResponseEntity<?> uploadCampaign(@RequestBody CampaignDto.RequestList requestDto){
         return ResponseEntity.ok(organizationService.saveCampaign(requestDto, "12345678"));
     }
 
     @PostMapping("/upload/campaign-cost")
-    public ResponseEntity<?> uploadCampaignCost(@RequestBody CampaignCostRequestDto requestDto){
+    public ResponseEntity<?> uploadCampaignCost(@RequestBody CampaignCostDto.RequestList requestDto){
         return ResponseEntity.ok(organizationService.saveCampaignCost(requestDto, "12345678"));
     }
 
@@ -92,7 +92,7 @@ public class OrganizationController {
     public ResponseEntity<?> findAllCampaign(){
         //TODO: Get Register Number from Session
         String registerNumber = "12345678";
-        return ResponseEntity.ok(organizationService.lookupCampiagn(registerNumber));
+        return ResponseEntity.ok(organizationService.lookupCampaign(registerNumber));
     }
 
     @GetMapping("/lookup/campaign-cost")

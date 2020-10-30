@@ -1,11 +1,8 @@
 package com.seereal.algi.service;
 
-import com.seereal.algi.dto.activity.ActivityRequestDto;
-import com.seereal.algi.dto.activity.ActivityResponseDto;
-import com.seereal.algi.dto.campaign.CampaginRequestDto;
-import com.seereal.algi.dto.campaign.CampaignResponseDto;
-import com.seereal.algi.dto.campaigncost.CampaignCostRequestDto;
-import com.seereal.algi.dto.campaigncost.CampaignCostResponseDto;
+import com.seereal.algi.dto.activity.ActivityDto;
+import com.seereal.algi.dto.campaign.CampaignDto;
+import com.seereal.algi.dto.campaigncost.CampaignCostDto;
 import com.seereal.algi.dto.organization.OrganizationSignUpRequestDto;
 import com.seereal.algi.dto.taxincome.TaxIncomeSummaryRequestDto;
 import com.seereal.algi.dto.taxincome.TaxIncomeSummaryResponseDto;
@@ -38,7 +35,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.seereal.algi.config.constant.S3Constants.*;
+import static com.seereal.algi.config.constant.S3Constants.BUSINESS_REPORT_NAME;
+import static com.seereal.algi.config.constant.S3Constants.TAX_REPORT_NAME;
 
 @Service
 @RequiredArgsConstructor
@@ -139,67 +137,74 @@ public class OrganizationService {
 
     // 활동 등록
     @Transactional
-    public ActivityResponseDto saveActivity(ActivityRequestDto activityDto, String registerNumber){
-        Activity activity = modelMapper.map(activityDto, Activity.class);
+    public boolean saveActivity(ActivityDto.RequestList activityDto, String registerNumber){
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                 .orElseThrow(() -> new IllegalArgumentException("기관 정보가 검색되지 않습니다."));
-        activity.setOrganization(organization);
+        activityDto.getActivityRequests().forEach(dto -> {
+            Activity activity = modelMapper.map(dto, Activity.class);
+            activity.setOrganization(organization);
+            activityRepository.save(activity);
+        });
 
-        Activity newActivity = activityRepository.save(activity);
-        return this.modelMapper.map(newActivity, ActivityResponseDto.class);
+        return true;
     }
 
     // 활동 조회
     @Transactional(readOnly = true)
-    public List<ActivityResponseDto> lookupActivity(String registerNumber){
+    public List<ActivityDto.Response> lookupActivity(String registerNumber){
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                 .orElseThrow(() -> new IllegalArgumentException("기관 정보가 검색되지 않습니다."));
         return organization.getActivityList().stream()
-                .map(activity -> modelMapper.map(activity, ActivityResponseDto.class))
+                .map(activity -> modelMapper.map(activity, ActivityDto.Response.class))
                 .collect(Collectors.toList());
     }
 
     // 캠페인 등록
     @Transactional
-    public CampaignResponseDto saveCampaign(CampaginRequestDto campaginDto, String registerNumber){
-        Campaign campaign = modelMapper.map(campaginDto, Campaign.class);
+    public boolean saveCampaign(CampaignDto.RequestList campaignDto, String registerNumber){
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                 .orElseThrow(() -> new IllegalArgumentException("기관 정보가 검색되지 않습니다."));
-        campaign.setOrganization(organization);
+        campaignDto.getCampaignRequests().forEach(dto -> {
+            Campaign campaign = modelMapper.map(dto, Campaign.class);
+            campaign.setOrganization(organization);
+            campaignRepository.save(campaign);
+        });
 
-        Campaign newCampaign = campaignRepository.save(campaign);
-        return this.modelMapper.map(newCampaign, CampaignResponseDto.class);
+        return true;
     }
 
     // 캠페인 조회
     @Transactional(readOnly = true)
-    public List<CampaignResponseDto> lookupCampiagn(String registerNumber){
+    public List<CampaignDto.Response> lookupCampaign(String registerNumber){
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                 .orElseThrow(() -> new IllegalArgumentException("기관 정보가 검색되지 않습니다."));
         return organization.getCampaignList().stream()
-                .map(campaign -> modelMapper.map(campaign, CampaignResponseDto.class))
+                .map(campaign -> modelMapper.map(campaign, CampaignDto.Response.class))
                 .collect(Collectors.toList());
     }
 
     // 캠페인 지출 내역 등록
     @Transactional
-    public CampaignCostResponseDto saveCampaignCost(CampaignCostRequestDto campaignCostDto, String registerNumber){
-        CampaignCost campaignCost = modelMapper.map(campaignCostDto, CampaignCost.class);
+    public boolean saveCampaignCost(CampaignCostDto.RequestList campaignCostDto, String registerNumber){
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                 .orElseThrow(() -> new IllegalArgumentException("기관 정보가 검색되지 않습니다."));
-        campaignCost.setOrganization(organization);
 
-        CampaignCost newCampaignCost = costRepository.save(campaignCost);
-        return this.modelMapper.map(newCampaignCost, CampaignCostResponseDto.class);
+        campaignCostDto.getCampaignCostRequests().forEach(dto -> {
+            CampaignCost campaignCost = modelMapper.map(dto, CampaignCost.class);
+            campaignCost.setOrganization(organization);
+            costRepository.save(campaignCost);
+        });
+
+        return true;
     }
 
     // 캠페인 지출 내역 조회
     @Transactional(readOnly = true)
-    public List<CampaignCostResponseDto> lookupCampiagnCost(String registerNumber){
+    public List<CampaignCostDto.Response> lookupCampiagnCost(String registerNumber){
         Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
                 .orElseThrow(() -> new IllegalArgumentException("기관 정보가 검색되지 않습니다."));
         return organization.getCampaignCostList().stream()
-                .map(campaignCost -> modelMapper.map(campaignCost, CampaignCostResponseDto.class))
+                .map(campaignCost -> modelMapper.map(campaignCost, CampaignCostDto.Response.class))
                 .collect(Collectors.toList());
     }
 
