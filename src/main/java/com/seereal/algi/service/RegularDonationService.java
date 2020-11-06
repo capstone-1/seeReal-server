@@ -7,13 +7,16 @@ import com.seereal.algi.model.category.CategoryRepository;
 import com.seereal.algi.model.donation.*;
 import com.seereal.algi.service.util.S3Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
-import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.seereal.algi.config.constant.S3Constants.DONATION_IMAGE;
@@ -32,6 +35,11 @@ public class RegularDonationService {
     private S3Util s3Util;
     @Autowired
     private CategoryRepository categoryRepository;
+
+    private Donation getDonationById(Long id, String s) {
+        return donationRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(s));
+    }
 
     public String saveRegularDonation(DonationSaveRequestDto requestDto) {
         Donation donation = DonationSaveRequestDto.convertToEntity(requestDto);
@@ -53,13 +61,20 @@ public class RegularDonationService {
         return presignedUrl.toExternalForm();
     } // 조회시 조회용 url 발급 필요
 
-    public List<SimpleDonationResponseDto> getRegularDonationList() {
-        return donationRepository.findAll().stream().map(SimpleDonationResponseDto::new).collect(Collectors.toList());
+    public PagedModel<EntityModel<SimpleDonationResponseDto>> getRegularDonationList(Pageable pageable) {
+        Page<SimpleDonationResponseDto> page = donationRepository.findAll(pageable).map(SimpleDonationResponseDto::new);
+        PagedResourcesAssembler<SimpleDonationResponseDto> assembler = new PagedResourcesAssembler<>(null, null);
+        return assembler.toModel(page);
+    }
+
+    public PagedModel<EntityModel<SimpleDonationResponseDto>> getRegularDonationList(Pageable pageable, String name) {
+        Page<SimpleDonationResponseDto> page = donationRepository.findSearchName(name, pageable).map(SimpleDonationResponseDto::new);
+        PagedResourcesAssembler<SimpleDonationResponseDto> assembler = new PagedResourcesAssembler<>(null, null);
+        return assembler.toModel(page);
     }
 
     public DetailDonationResponseDto getRegularDonationDetail(Long id) {
-        Donation donation = donationRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("No Donation"));
+        Donation donation = getDonationById(id, "No Donation");
         donation.setProfileUrl(s3Util.generateURL(S3Constants.DONATION_PREFIX, String.valueOf(id), DONATION_IMAGE));
         return DetailDonationResponseDto.convertToDto(donationRepository.save(donation));
     }
@@ -71,8 +86,7 @@ public class RegularDonationService {
     // 정기기부 결과 등록
     public void saveDonationResult(DonationResultDto.Request requestDto, Long id) {
         DonationResult result = requestDto.convertToEntity();
-        Donation donation = donationRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("해당 등록자 정보가 없습니다."));
+        Donation donation = getDonationById(id, "해당 등록자 정보가 없습니다.");
         result.setDonation(donation);
         donationResultRepository.save(result);
     }
@@ -81,8 +95,7 @@ public class RegularDonationService {
     public void saveDonationCostResult(DonationCostResultDto.Request requestDto, Long id, Integer quarter) {
         DonationCostResult costResult = requestDto.convertToEntity();
 
-        Donation donation = donationRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("해당 등록자 정보가 없습니다."));
+        Donation donation = getDonationById(id, "해당 등록자 정보가 없습니다.");
         List<DonationResult> results = donation.getResults();
 
         // 도네이션 정보로부터 도네이션 리저트 획득 -> 입력받은 quater로 필터링
@@ -98,10 +111,9 @@ public class RegularDonationService {
         donationCostResultRepository.save(costResult);
     }
 
-    // 한 정기기부의 특정 분기에 대한 결과 내역을 조회한다.
+    // 한 정기기부의 특정 분기에 대한 결과 내역 조회
     public DonationResultDto.Response findDonationResultByNameAndQuater(Long id, Integer quarter) {
-        Donation donation = donationRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("해당 등록자 정보가 없습니다."));
+        Donation donation = getDonationById(id, "해당 등록자 정보가 없습니다.");
         List<DonationResult> results = donation.getResults();
 
         // 도네이션 정보로부터 도네이션 리저트 획득 -> 입력받은 quater로 필터링
@@ -118,15 +130,23 @@ public class RegularDonationService {
                 .build();
     }
 
-    public List<SimpleDonationResponseDto> getRegularDonationsByCategory(List<String> categories) {
-        List<Category> categoryList = categories.stream()
-                .map(this::convertToCategory)
-                .collect(Collectors.toList());
+    public PagedModel<EntityModel<SimpleDonationResponseDto>> getRegularDonationsByCategory(Pageable pageable, String category) {
+//        List<Donation> category = convertToCategory(search).getDonations();
+        Page<SimpleDonationResponseDto> page = donationRepository.findSearchCategory(category, pageable).map(SimpleDonationResponseDto::new);
+        PagedResourcesAssembler<SimpleDonationResponseDto> assembler = new PagedResourcesAssembler<>(null, null);
+        return assembler.toModel(page);
 
-        Set<Donation> regularDonations = new HashSet<>();
-        for (Category category : categoryList) {
-            categoryRepository.findByName(category.getName()).ifPresent(c -> regularDonations.addAll(c.getDonations()));
-        }
-        return regularDonations.stream().map(SimpleDonationResponseDto::new).collect(Collectors.toList());
+//        PagedResourcesAssembler<SimpleDonationResponseDto> assembler = new PagedResourcesAssembler<>(null, null);
+//        PagedModel<EntityModel<AlbumResponseDto>> pagedModel = assembler.toModel(page); // page 객체 기반 pagedModel 생성
+
+//        List<Category> categoryList = categories.stream()
+//                .map(this::convertToCategory)
+//                .collect(Collectors.toList());
+//
+//        Set<Donation> regularDonations = new HashSet<>();
+//        for (Category category : categoryList) {
+//            categoryRepository.findByName(category.getName()).ifPresent(c -> regularDonations.addAll(c.getDonations()));
+//        }
+//        return regularDonations.stream().map(SimpleDonationResponseDto::new).collect(Collectors.toList());
     }
 }

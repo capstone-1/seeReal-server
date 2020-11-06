@@ -36,3 +36,41 @@ insert into category (CATEGORY_ID, NAME)
 values (2, 'B');
 insert into category (CATEGORY_ID, NAME)
 values (3, 'C');
+
+insert into donation (DONATION_ID, NAME, REGISTRANT, SHORT_INTRODUCTION, PROFILE_URL, TARGET, CONTENT, INTRODUCTION, PLAN)
+values (1, 'name1', 'registrant', 'short introduction', null, 'target', 'content', 'intro', 'plan');
+insert into donation (DONATION_ID, NAME, REGISTRANT, SHORT_INTRODUCTION, PROFILE_URL, TARGET, CONTENT, INTRODUCTION, PLAN)
+values (2, 'name21', 'registrant', 'short introduction', null, 'target', 'content', 'intro', 'plan');
+insert into donation (DONATION_ID, NAME, REGISTRANT, SHORT_INTRODUCTION, PROFILE_URL, TARGET, CONTENT, INTRODUCTION, PLAN)
+values (3, 'name22', 'registrant', 'short introduction', null, 'target', 'content', 'intro', 'plan');
+insert into donation (DONATION_ID, NAME, REGISTRANT, SHORT_INTRODUCTION, PROFILE_URL, TARGET, CONTENT, INTRODUCTION, PLAN)
+values (4, 'name23', 'registrant', 'short introduction', null, 'target', 'content', 'intro', 'plan');
+insert into donation (DONATION_ID, NAME, REGISTRANT, SHORT_INTRODUCTION, PROFILE_URL, TARGET, CONTENT, INTRODUCTION, PLAN)
+values (5, 'name24', 'registrant', 'short introduction', null, 'target', 'content', 'intro', 'plan');
+insert into donation (DONATION_ID, NAME, REGISTRANT, SHORT_INTRODUCTION, PROFILE_URL, TARGET, CONTENT, INTRODUCTION, PLAN)
+values (6, 'name25', 'registrant', 'short introduction', null, 'target', 'content', 'intro', 'plan');
+insert into donation (DONATION_ID, NAME, REGISTRANT, SHORT_INTRODUCTION, PROFILE_URL, TARGET, CONTENT, INTRODUCTION, PLAN)
+values (7, 'name26', 'registrant', 'short introduction', null, 'target', 'content', 'intro', 'plan');
+insert into donation (DONATION_ID, NAME, REGISTRANT, SHORT_INTRODUCTION, PROFILE_URL, TARGET, CONTENT, INTRODUCTION, PLAN)
+values (8, 'name31', 'registrant', 'short introduction', null, 'target', 'content', 'intro', 'plan');
+insert into donation (DONATION_ID, NAME, REGISTRANT, SHORT_INTRODUCTION, PROFILE_URL, TARGET, CONTENT, INTRODUCTION, PLAN)
+values (9, 'name27', 'registrant', 'short introduction', null, 'target', 'content', 'intro', 'plan');
+insert into donation (DONATION_ID, NAME, REGISTRANT, SHORT_INTRODUCTION, PROFILE_URL, TARGET, CONTENT, INTRODUCTION, PLAN)
+values (10, 'name28', 'registrant', 'short introduction', null, 'target', 'content', 'intro', 'plan');
+insert into donation (DONATION_ID, NAME, REGISTRANT, SHORT_INTRODUCTION, PROFILE_URL, TARGET, CONTENT, INTRODUCTION, PLAN)
+values (11, 'name29', 'registrant', 'short introduction', null, 'target', 'content', 'intro', 'plan');
+insert into donation (DONATION_ID, NAME, REGISTRANT, SHORT_INTRODUCTION, PROFILE_URL, TARGET, CONTENT, INTRODUCTION, PLAN)
+values (12, 'name229', 'registrant', 'short introduction', null, 'target', 'content', 'intro', 'plan');
+
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (1, 1);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (2, 3);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (7, 3);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (3, 1);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (5, 2);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (10, 3);

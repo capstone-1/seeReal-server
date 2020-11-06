@@ -6,6 +6,11 @@ import com.seereal.algi.dto.donation.DonationSaveRequestDto;
 import com.seereal.algi.dto.donation.SimpleDonationResponseDto;
 import com.seereal.algi.service.RegularDonationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +29,14 @@ public class DonationController {
 
     //정기기부 목록 조회
     @GetMapping("/regular-donation")
-    public List<SimpleDonationResponseDto> getRegularDonationList() {
-        return regularDonationService.getRegularDonationList();
+    public ResponseEntity<PagedModel<EntityModel<SimpleDonationResponseDto>>> getRegularDonationList(@PageableDefault(size = 10) Pageable pageable,
+                                                                                                     @RequestParam(value = "search", required = false) String name) {
+        if (name == null) {
+            return new ResponseEntity<>(regularDonationService.getRegularDonationList(pageable), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(regularDonationService.getRegularDonationList(pageable, name), HttpStatus.OK);
     }
+
     //정기기부 상세 조회
     @GetMapping("/regular-donation/{id}")
     public DetailDonationResponseDto getRegularDonationDetail(@PathVariable Long id) {
@@ -57,7 +67,8 @@ public class DonationController {
 
     // 승인된 정기 기부 검색 (검색 조건 : 카테고리)
     @GetMapping("regular-donation/category")
-    public List<SimpleDonationResponseDto> getRegularDonationsByCategory(@RequestParam(value = "name") List<String> categories) {
-        return regularDonationService.getRegularDonationsByCategory(categories);
+    public ResponseEntity<PagedModel<EntityModel<SimpleDonationResponseDto>>> getRegularDonationsByCategory(@PageableDefault(size = 10) Pageable pageable,
+                                                                                                            @RequestParam(value = "category") String category) {
+        return new ResponseEntity<>(regularDonationService.getRegularDonationsByCategory(pageable, category), HttpStatus.OK);
     }
 }
