@@ -4,10 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
@@ -25,7 +22,9 @@ public class OrganizationCampignReview {
     private Integer itenNumber;
     private String itemShop;
     private Integer itenFee;
+    @Column(length = 4000)
     private String workReceiptUrl;
+    @Column(length = 4000)
     private String itemReceiptUrl;
 
     @Builder

@@ -1,11 +1,11 @@
 package com.seereal.algi.service;
 
-import com.seereal.algi.config.constant.S3Constants;
+import com.seereal.algi.config.constant.GCSConstants;
 import com.seereal.algi.dto.donation.*;
 import com.seereal.algi.model.category.Category;
 import com.seereal.algi.model.category.CategoryRepository;
 import com.seereal.algi.model.donation.*;
-import com.seereal.algi.service.util.S3Util;
+import com.seereal.algi.service.util.GCSUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.seereal.algi.config.constant.S3Constants.DONATION_IMAGE;
+import static com.seereal.algi.config.constant.GCSConstants.DONATION_IMAGE;
 
 @Service
 public class RegularDonationService {
@@ -29,7 +29,7 @@ public class RegularDonationService {
     @Autowired
     private DonationCostResultRepository donationCostResultRepository;
     @Autowired
-    private S3Util s3Util;
+    private GCSUtil GCSUtil;
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -49,7 +49,7 @@ public class RegularDonationService {
                     categoryRepository.save(c);
                 });
 
-        URL presignedUrl = s3Util.getPresignedUrlForRegularDonation(id, DONATION_IMAGE);
+        URL presignedUrl = GCSUtil.getPresignedUrlForRegularDonation(id, DONATION_IMAGE);
         return presignedUrl.toExternalForm();
     } // 조회시 조회용 url 발급 필요
 
@@ -60,7 +60,7 @@ public class RegularDonationService {
     public DetailDonationResponseDto getRegularDonationDetail(Long id) {
         Donation donation = donationRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("No Donation"));
-        donation.setProfileUrl(s3Util.generateURL(S3Constants.DONATION_PREFIX, String.valueOf(id), DONATION_IMAGE));
+        donation.setProfileUrl(GCSUtil.generateURL(GCSConstants.DONATION_PREFIX, String.valueOf(id), DONATION_IMAGE));
         return DetailDonationResponseDto.convertToDto(donationRepository.save(donation));
     }
 
@@ -89,11 +89,11 @@ public class RegularDonationService {
         DonationResult result = results.stream()
                 .filter(donationResult -> donationResult.getQuarter().equals(quarter)).collect(Collectors.toList()).get(0);
 
-        URL presignedUrl = s3Util.getPresignedUrlForDonation(result.getId() + result.getQuarter() + costResult.getName(),
-                S3Constants.DONATION_RECEIPT);
+        URL presignedUrl = GCSUtil.getPresignedUrlForDonation(result.getId() + result.getQuarter() + costResult.getName(),
+                GCSConstants.DONATION_RECEIPT);
         // costResult에 값 세팅팅
         costResult.setDonationResult(result);
-        costResult.setReceiptUrl(s3Util.parseS3Url(presignedUrl));
+        costResult.setReceiptUrl(GCSUtil.parseS3Url(presignedUrl));
 
         donationCostResultRepository.save(costResult);
     }

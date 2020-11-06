@@ -25,7 +25,7 @@ public class RegisteredCampaign {
     private String registrant;
     @Column(unique = true)
     private String campaignName;
-    @Nullable
+    @Column(length = 4000, nullable = true)
     private String campaignImage;
     private String introduction;
     private LocalDate startDate;

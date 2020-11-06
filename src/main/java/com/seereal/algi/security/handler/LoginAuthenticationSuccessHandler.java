@@ -1,6 +1,5 @@
 package com.seereal.algi.security.handler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seereal.algi.security.context.OrganizationContext;
 import com.seereal.algi.security.context.TokenContext;
@@ -9,9 +8,8 @@ import com.seereal.algi.security.token.LoginPostAuthorizationToken;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.HttpHeaders;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;

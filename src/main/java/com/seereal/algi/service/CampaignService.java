@@ -1,6 +1,6 @@
 package com.seereal.algi.service;
 
-import com.seereal.algi.config.constant.S3Constants;
+import com.seereal.algi.config.constant.GCSConstants;
 import com.seereal.algi.dto.registeredCampaign.*;
 import com.seereal.algi.model.campaignReview.OrganizationCampaignReviewRepository;
 import com.seereal.algi.model.campaignReview.OrganizationCampignReview;
@@ -12,12 +12,10 @@ import com.seereal.algi.model.registeredCampaign.RegisteredCampaign;
 import com.seereal.algi.model.registeredCampaign.RegisteredCampaignRepository;
 import com.seereal.algi.model.suggestedCampaign.SuggestedCampaign;
 import com.seereal.algi.model.suggestedCampaign.SuggestedCampaignRepository;
-import com.seereal.algi.service.util.S3Util;
+import com.seereal.algi.service.util.GCSUtil;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.net.URL;
 import java.util.*;
@@ -32,7 +30,7 @@ public class CampaignService {
     private final SuggestedCampaignRepository suggestedCampaignRepository;
     private final PersonalCampaignReviewRepository personalCampaignReviewRepository;
     private final OrganizationCampaignReviewRepository organizationCampaignReviewRepository;
-    private final S3Util s3Util;
+    private final GCSUtil GCSUtil;
 
     public String saveCampaign(List<Category> categories, RegisteredCampaign registeredCampaign) {
         // save
@@ -43,7 +41,7 @@ public class CampaignService {
         }
         Long id = registeredCampaignRepository.save(registeredCampaign).getId();
 
-        URL presignedUrl = s3Util.getPresignedUrlForCampaign(id, S3Constants.CAMPAIGN_IMAGE);
+        URL presignedUrl = GCSUtil.getPresignedUrlForCampaign(id, GCSConstants.CAMPAIGN_IMAGE);
 //        registeredCampaign.setCampaignImageUrl(s3Util.parseS3Url(presignedUrl));
         return presignedUrl.toExternalForm();
     }
@@ -107,7 +105,7 @@ public class CampaignService {
     public CampaignDetailsResponseDto getCampaignDetails(Long id) {
         RegisteredCampaign registeredCampaign = registeredCampaignRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("No Campaign Details"));
-        registeredCampaign.setCampaignImage(s3Util.generateURL(S3Constants.CAMPAIGN_PREFIX, String.valueOf(id), S3Constants.CAMPAIGN_IMAGE));
+        registeredCampaign.setCampaignImage(GCSUtil.generateURL(GCSConstants.CAMPAIGN_PREFIX, String.valueOf(id), GCSConstants.CAMPAIGN_IMAGE));
         return CampaignDetailsResponseDto.convertToDto(registeredCampaignRepository.save(registeredCampaign));
     }
 
@@ -133,10 +131,10 @@ public class CampaignService {
                 .orElseThrow(() -> new NoSuchElementException("Invalid Category Name!"));
         OrganizationCampignReview review = OrgCampaignReviewRequestDto.convertToEntity(requestDto);
 
-        URL presignedUrlForWorkReceipt = s3Util.getPresignedUrlForCampaign(id, S3Constants.CAMPAIGN_WORK_RECEIPT);
-        review.setWorkReceiptUrl(s3Util.parseS3Url(presignedUrlForWorkReceipt));
-        URL presignedUrlForItemReceipt = s3Util.getPresignedUrlForCampaign(id, S3Constants.CAMPAIGN_ITEM_RECEIPT);
-        review.setItemReceiptUrl(s3Util.parseS3Url(presignedUrlForItemReceipt));
+        URL presignedUrlForWorkReceipt = GCSUtil.getPresignedUrlForCampaign(id, GCSConstants.CAMPAIGN_WORK_RECEIPT);
+        review.setWorkReceiptUrl(GCSUtil.parseS3Url(presignedUrlForWorkReceipt));
+        URL presignedUrlForItemReceipt = GCSUtil.getPresignedUrlForCampaign(id, GCSConstants.CAMPAIGN_ITEM_RECEIPT);
+        review.setItemReceiptUrl(GCSUtil.parseS3Url(presignedUrlForItemReceipt));
 
         campaign.addOrganizationReview(review);
         organizationCampaignReviewRepository.save(review);

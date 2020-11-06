@@ -1,0 +1,22 @@
+POST http://localhost:8080/organization/upload/activity
+Content-Type: application/json
+
+{
+  "activityRequests":
+  [
+    {
+      "name": "name",
+      "content" : "content",
+      "performance": "wow",
+      "limitation": "woo"
+    },
+    {
+      "name": "name3",
+      "content" : "co4ntent",
+      "performance": "w253ow",
+      "limitation": "wo234o"
+    }
+  ]
+}
+
+###

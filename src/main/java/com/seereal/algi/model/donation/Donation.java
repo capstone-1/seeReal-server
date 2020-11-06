@@ -21,6 +21,7 @@ public class Donation {
     private String name;
     private String registrant;
     private String shortIntroduction;
+    @Column(length = 4000)
     private String profileUrl;
     private String target;
     private String content;

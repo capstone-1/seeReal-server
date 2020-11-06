@@ -36,7 +36,9 @@ public class Organization {
     private String registerNumber;
     @Column(nullable = false)
     private String account;
+    @Column(length = 4000)
     private String businessReportLink;
+    @Column(length = 4000)
     private String taxReportLink;
 
     @OneToOne

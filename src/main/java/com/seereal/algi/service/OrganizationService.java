@@ -20,7 +20,7 @@ import com.seereal.algi.model.taxincome.TaxIncomeSummary;
 import com.seereal.algi.model.taxincome.TaxIncomeSummaryRepository;
 import com.seereal.algi.model.taxoutcome.TaxOutcomeSummary;
 import com.seereal.algi.model.taxoutcome.TaxOutcomeSummaryRepository;
-import com.seereal.algi.service.util.S3Util;
+import com.seereal.algi.service.util.GCSUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -35,8 +35,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.seereal.algi.config.constant.S3Constants.BUSINESS_REPORT_NAME;
-import static com.seereal.algi.config.constant.S3Constants.TAX_REPORT_NAME;
+import static com.seereal.algi.config.constant.GCSConstants.BUSINESS_REPORT_NAME;
+import static com.seereal.algi.config.constant.GCSConstants.TAX_REPORT_NAME;
 
 @Service
 @RequiredArgsConstructor
@@ -52,26 +52,26 @@ public class OrganizationService {
     private final OrganizationRepository organizationRepository;
     private final TaxIncomeSummaryRepository incomeSummaryRepository;
     private final TaxOutcomeSummaryRepository outcomeSummaryRepository;
-    private final S3Util s3Util;
+    private final GCSUtil GCSUtil;
 
     public String getPresignedUrlForBusinessReport(String registerNumber) {
-        URL presignedUrl = s3Util.getPresignedUrlForOrganization(registerNumber, BUSINESS_REPORT_NAME);
+        URL presignedUrl = GCSUtil.getPresignedUrlForOrganization(registerNumber, BUSINESS_REPORT_NAME);
         //DB 저장
-        Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
-                                                            .orElseThrow(() -> new IllegalArgumentException("Organization Not Found!"));
-        organization.setBusinessReportLink(s3Util.parseS3Url(presignedUrl));
-        organizationRepository.save(organization);
+//        Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
+//                                                            .orElseThrow(() -> new IllegalArgumentException("Organization Not Found!"));
+//        organization.setBusinessReportLink(GCSUtil.parseS3Url(presignedUrl));
+//        organizationRepository.save(organization);
 
         return presignedUrl.toExternalForm();
     }
 
     public String getPresignedUrlForTaxReport(String registerNumber) {
-        URL presignedUrl = s3Util.getPresignedUrlForOrganization(registerNumber, TAX_REPORT_NAME);
+        URL presignedUrl = GCSUtil.getPresignedUrlForOrganization(registerNumber, TAX_REPORT_NAME);
         //DB 저장
-        Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
-                                                            .orElseThrow(() -> new IllegalArgumentException("Organization Not Found!"));
-        organization.setTaxReportLink(s3Util.parseS3Url(presignedUrl));
-        organizationRepository.save(organization);
+//        Organization organization = organizationRepository.findByRegisterNumber(registerNumber)
+//                                                            .orElseThrow(() -> new IllegalArgumentException("Organization Not Found!"));
+//        organization.setTaxReportLink(GCSUtil.parseS3Url(presignedUrl));
+//        organizationRepository.save(organization);
         return presignedUrl.toExternalForm();
 
     }

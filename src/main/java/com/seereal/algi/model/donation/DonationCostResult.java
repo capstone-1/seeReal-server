@@ -20,6 +20,7 @@ public class DonationCostResult {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "donation_result_id")
     private DonationResult donationResult;
+    @Column(length = 4000)
     private String receiptUrl;
 
     @Builder
