@@ -8,7 +8,7 @@ import static com.seereal.algi.config.constant.SecurityConstants.TOKEN_PREFIX;
 @Component
 public class HeaderTokenExtractor {
     public String extract(String header) {
-        if (StringUtils.isEmpty(header) | header.length() < TOKEN_PREFIX.length()) {
+        if (StringUtils.isEmpty(header) || header.length() < TOKEN_PREFIX.length()) {
             throw new InvalidJwtException("Invalid Token Information!");
         }
         return header.substring(TOKEN_PREFIX.length(), header.length());
