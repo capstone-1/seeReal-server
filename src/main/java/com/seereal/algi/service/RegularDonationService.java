@@ -62,7 +62,8 @@ public class RegularDonationService {
     } // 조회시 조회용 url 발급 필요
 
     public PagedModel<EntityModel<SimpleDonationResponseDto>> getRegularDonationList(Pageable pageable) {
-        Page<SimpleDonationResponseDto> page = donationRepository.findAll(pageable).map(SimpleDonationResponseDto::new);
+        Page<SimpleDonationResponseDto> page = donationRepository.findAll(pageable).map(donation -> new SimpleDonationResponseDto(donation,
+                s3Util.generateURL(S3Constants.DONATION_PREFIX, String.valueOf(donation.getId()), DONATION_IMAGE)));
         PagedResourcesAssembler<SimpleDonationResponseDto> assembler = new PagedResourcesAssembler<>(null, null);
         return assembler.toModel(page);
     }
@@ -131,22 +132,8 @@ public class RegularDonationService {
     }
 
     public PagedModel<EntityModel<SimpleDonationResponseDto>> getRegularDonationsByCategory(Pageable pageable, String category) {
-//        List<Donation> category = convertToCategory(search).getDonations();
         Page<SimpleDonationResponseDto> page = donationRepository.findSearchCategory(category, pageable).map(SimpleDonationResponseDto::new);
         PagedResourcesAssembler<SimpleDonationResponseDto> assembler = new PagedResourcesAssembler<>(null, null);
         return assembler.toModel(page);
-
-//        PagedResourcesAssembler<SimpleDonationResponseDto> assembler = new PagedResourcesAssembler<>(null, null);
-//        PagedModel<EntityModel<AlbumResponseDto>> pagedModel = assembler.toModel(page); // page 객체 기반 pagedModel 생성
-
-//        List<Category> categoryList = categories.stream()
-//                .map(this::convertToCategory)
-//                .collect(Collectors.toList());
-//
-//        Set<Donation> regularDonations = new HashSet<>();
-//        for (Category category : categoryList) {
-//            categoryRepository.findByName(category.getName()).ifPresent(c -> regularDonations.addAll(c.getDonations()));
-//        }
-//        return regularDonations.stream().map(SimpleDonationResponseDto::new).collect(Collectors.toList());
     }
 }
