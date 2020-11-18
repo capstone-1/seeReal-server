@@ -66,7 +66,7 @@ public class DonationController {
     }
 
     // 승인된 정기 기부 검색 (검색 조건 : 카테고리)
-    @GetMapping("regular-donation/category")
+    @GetMapping("regular-donation")
     public ResponseEntity<PagedModel<EntityModel<SimpleDonationResponseDto>>> getRegularDonationsByCategory(@PageableDefault(size = 10) Pageable pageable,
                                                                                                             @RequestParam(value = "category") String category) {
         return new ResponseEntity<>(regularDonationService.getRegularDonationsByCategory(pageable, category), HttpStatus.OK);
