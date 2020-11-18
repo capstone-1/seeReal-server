@@ -22,9 +22,10 @@ public class DetailDonationResponseDto {
     private String introduction;
     private String plan;
     private List<String> categories = new ArrayList<>();
+    private List<DonationCostPreviewResponseDto> costPreviews = new ArrayList<>();
 
     @Builder
-    public DetailDonationResponseDto(String name, String registrant, String shortIntroduction, String profileUrl, String target, String content, String introduction, String plan, List<String> categories) {
+    public DetailDonationResponseDto(String name, String registrant, String shortIntroduction, String profileUrl, String target, String content, String introduction, String plan, List<String> categories, List<DonationCostPreviewResponseDto> costPreviews) {
         this.name = name;
         this.registrant = registrant;
         this.shortIntroduction = shortIntroduction;
@@ -34,6 +35,7 @@ public class DetailDonationResponseDto {
         this.introduction = introduction;
         this.plan = plan;
         this.categories = categories;
+        this.costPreviews = costPreviews;
     }
 
     public static DetailDonationResponseDto convertToDto(Donation donation) {
@@ -47,6 +49,7 @@ public class DetailDonationResponseDto {
                 .registrant(donation.getRegistrant())
                 .shortIntroduction(donation.getShortIntroduction())
                 .target(donation.getTarget())
+                .costPreviews(donation.getCostPreviews().stream().map(DonationCostPreviewResponseDto::convertToDto).collect(Collectors.toList()))
                 .build();
     }
 }
