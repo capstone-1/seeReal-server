@@ -30,8 +30,8 @@ public class DonationController {
     //정기기부 목록 조회
     @GetMapping("/regular-donation")
     public ResponseEntity<PagedModel<EntityModel<SimpleDonationResponseDto>>> getRegularDonationList(@PageableDefault(size = 10) Pageable pageable,
-                                                                                                     @RequestParam(value = "search", required = false) String name) {
-        if (name == null) {
+                                                                                                     @RequestParam(value = "search") String name) {
+        if (name.isEmpty()) {
             return new ResponseEntity<>(regularDonationService.getRegularDonationList(pageable), HttpStatus.OK);
         }
         return new ResponseEntity<>(regularDonationService.getRegularDonationList(pageable, name), HttpStatus.OK);

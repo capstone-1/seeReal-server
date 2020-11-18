@@ -55,11 +55,6 @@ public class OrganizationController {
     public ResponseEntity<?> uploadCampaign(@RequestBody TaxOutcomeSummaryRequestDto requestDto) {
         return ResponseEntity.ok(organizationService.saveTaxOutcome(requestDto, "12345678"));
     }
-//    public ResponseEntity<?> uploadCampaign(@RequestBody TaxOutcomeSummaryRequestDto requestDto, Authentication authentication){
-//        JwtPostAuthorizationToken token = (JwtPostAuthorizationToken) authentication;
-//        System.out.println(token.getOrganizationContext().getUsername());
-//        return ResponseEntity.ok(organizationService.saveTaxOutcome(requestDto, token.getOrganizationContext().getUsername()));
-//    }
 
     @PostMapping("/upload/activity")
     public ResponseEntity<?> uploadActivity(@RequestBody ActivityDto.RequestList requestDto){

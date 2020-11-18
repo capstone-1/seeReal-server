@@ -74,3 +74,10 @@ insert into donation_category (DONATION_ID, CATEGORY_ID)
 values (5, 2);
 insert into donation_category (DONATION_ID, CATEGORY_ID)
 values (10, 3);
+
+insert into donation_cost_preview (ID, COST, ETC, NAME, TARGET_NUM, DONATION_ID)
+values (1, 3000, 'etc1', 'preview_name1', 3, 1);
+insert into donation_cost_preview (ID, COST, ETC, NAME, TARGET_NUM, DONATION_ID)
+values (2, 3000, 'etc2', 'preview_name2', 3, 2);
+insert into donation_cost_preview (ID, COST, ETC, NAME, TARGET_NUM, DONATION_ID)
+values (3, 3000, 'etc3', 'preview_name3', 3, 3);
