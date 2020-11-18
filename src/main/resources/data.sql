@@ -84,7 +84,29 @@ insert into donation_category (DONATION_ID, CATEGORY_ID)
 values (1, 1);
 insert into donation_category (DONATION_ID, CATEGORY_ID)
 values (1, 2);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (1, 3);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (1, 4);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (1, 5);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (1, 6);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (1, 7);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (1, 8);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (1, 9);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (1, 10);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (1, 11);
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (1, 12);
 
+insert into donation_category (DONATION_ID, CATEGORY_ID)
+values (1, 2);
 insert into donation_category (DONATION_ID, CATEGORY_ID)
 values (2, 2);
 insert into donation_category (DONATION_ID, CATEGORY_ID)
