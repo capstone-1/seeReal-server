@@ -69,7 +69,8 @@ public class RegularDonationService {
     }
 
     public PagedModel<EntityModel<SimpleDonationResponseDto>> getRegularDonationList(Pageable pageable, String name) {
-        Page<SimpleDonationResponseDto> page = donationRepository.findSearchName(name, pageable).map(SimpleDonationResponseDto::new);
+        Page<SimpleDonationResponseDto> page = donationRepository.findSearchName(name, pageable).map(donation -> new SimpleDonationResponseDto(donation,
+                s3Util.generateURL(S3Constants.DONATION_PREFIX, String.valueOf(donation.getId()), DONATION_IMAGE)));
         PagedResourcesAssembler<SimpleDonationResponseDto> assembler = new PagedResourcesAssembler<>(null, null);
         return assembler.toModel(page);
     }
@@ -132,7 +133,8 @@ public class RegularDonationService {
     }
 
     public PagedModel<EntityModel<SimpleDonationResponseDto>> getRegularDonationsByCategory(Pageable pageable, String category) {
-        Page<SimpleDonationResponseDto> page = donationRepository.findSearchCategory(category, pageable).map(SimpleDonationResponseDto::new);
+        Page<SimpleDonationResponseDto> page = donationRepository.findSearchCategory(category, pageable).map(donation -> new SimpleDonationResponseDto(donation,
+                s3Util.generateURL(S3Constants.DONATION_PREFIX, String.valueOf(donation.getId()), DONATION_IMAGE)));
         PagedResourcesAssembler<SimpleDonationResponseDto> assembler = new PagedResourcesAssembler<>(null, null);
         return assembler.toModel(page);
     }
