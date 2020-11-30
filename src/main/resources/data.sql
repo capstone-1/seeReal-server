@@ -360,29 +360,6 @@ values (25, 701200, null, '떡 구입비', 100, 8);
 insert into donation_cost_preview (ID, COST, ETC, NAME, TARGET_NUM, DONATION_ID)
 values (26, 4208120, null, '어르신 무료급식소 운영비', 210, 8);
 
-insert into donation_category (DONATION_ID, CATEGORY_ID)
-values (2, 1);
-insert into donation_category (DONATION_ID, CATEGORY_ID)
-values (3, 1);
-insert into donation_category (DONATION_ID, CATEGORY_ID)
-values (4, 1);
-insert into donation_category (DONATION_ID, CATEGORY_ID)
-values (5, 1);
-insert into donation_category (DONATION_ID, CATEGORY_ID)
-values (6, 1);
-insert into donation_category (DONATION_ID, CATEGORY_ID)
-values (7, 1);
-insert into donation_category (DONATION_ID, CATEGORY_ID)
-values (8, 1);
-insert into donation_category (DONATION_ID, CATEGORY_ID)
-values (9, 1);
-insert into donation_category (DONATION_ID, CATEGORY_ID)
-values (10, 1);
-insert into donation_category (DONATION_ID, CATEGORY_ID)
-values (11, 1);
-insert into donation_category (DONATION_ID, CATEGORY_ID)
-values (12, 1);
-
 insert into donation_cost_preview (ID, COST, ETC, NAME, TARGET_NUM, DONATION_ID)
 values (27, 3920000, null, '심리치료비', 10, 9);
 insert into donation_cost_preview (ID, COST, ETC, NAME, TARGET_NUM, DONATION_ID)
