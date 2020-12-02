@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests()
                     .antMatchers("/", "/css/**", "/images/**",
-                            "/js/**", "/h2/**", "/organization/**", "/campaign/**", "/regular-donation/**")
+                            "/js/**", "/h2/**", "/organization/**", "/campaign/**", "/regular-donation/**", "/portfolio/**")
                         .permitAll()
                     .antMatchers("/upload/**")
                         .hasRole(Role.AGENCY.name())
