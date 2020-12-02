@@ -5,6 +5,8 @@ import com.seereal.algi.dto.donation.*;
 import com.seereal.algi.model.category.Category;
 import com.seereal.algi.model.category.CategoryRepository;
 import com.seereal.algi.model.donation.*;
+import com.seereal.algi.model.user.User;
+import com.seereal.algi.model.user.UserRepository;
 import com.seereal.algi.security.context.UserContext;
 import com.seereal.algi.service.util.S3Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,8 @@ public class RegularDonationService {
     private S3Util s3Util;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     private Donation getDonationById(Long id, String s) {
         return donationRepository.findById(id)
@@ -140,9 +144,17 @@ public class RegularDonationService {
         return assembler.toModel(page);
     }
 
-    public void addFavoriteDonation(UserContext context, Long id) {
-        //id로 정기기부 이름 찾기
+    public Long addFavoriteDonation(UserContext context, Long id) {
+        // id로 정기기부 이름 찾기
+        Donation donation = donationRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Donation Not Found!"));
         // token에서 email 추출하고 이를 통해 사용자 검색 (DB)
+        User user = userRepository.findByEmail(context.getPassword()).orElseThrow(() -> new NoSuchElementException("User Not Found!"));
+
         // 연관관계 매핑
+        donation.addUsers(user);
+        user.addFavoriteDonation(donation);
+        donationRepository.save(donation);
+        userRepository.save(user);
+        return id;
     }
 }

@@ -434,3 +434,7 @@ insert into donation_cost_preview (ID, COST, ETC, NAME, TARGET_NUM, DONATION_ID)
 values (57, 7000000, null, '도예 및 공예 제작 지원', 12, 19);
 insert into donation_cost_preview (ID, COST, ETC, NAME, TARGET_NUM, DONATION_ID)
 values (58, 5900000, null, '어르신들의 배움 지원', 50, 19);
+
+-- User
+insert into USER (USER_ID, CREATED_DATE, MODIFIED_DATE, EMAIL, NAME, ROLE)
+values (1, '2020-12-03T01:11:49.981', '2020-12-03T01:11:49.981', 'sphong0417@gmail.com', 'sphong', 'GUEST')

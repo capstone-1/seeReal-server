@@ -1,9 +1,11 @@
 package com.seereal.algi.model.donation;
 
 import com.seereal.algi.model.category.Category;
+import com.seereal.algi.model.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -39,6 +41,12 @@ public class Donation {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_favorite_donation",
+                joinColumns = @JoinColumn(name = "donation_id"),
+                inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> users = new ArrayList<>();
+
     @Builder
     public Donation(String name, String registrant, String shortIntroduction, String profileUrl, String target, String content, String introduction, String plan) {
         this.name = name;
@@ -49,6 +57,9 @@ public class Donation {
         this.content = content;
         this.introduction = introduction;
         this.plan = plan;
+    }
+    public void addUsers(User user) {
+        this.users.add(user);
     }
     public void addCategory(Category category) {
         this.categories.add(category);

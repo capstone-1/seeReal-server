@@ -1,11 +1,14 @@
 package com.seereal.algi.model.user;
 
 import com.seereal.algi.model.BaseTimeEntity;
+import com.seereal.algi.model.donation.Donation;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -13,6 +16,7 @@ import javax.persistence.*;
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
     @Column(nullable = false)
     private String name;
@@ -21,6 +25,8 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;  // Role: 직접 만드는 클래스
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "users")
+    private List<Donation> favoriteDonations = new ArrayList<>();
 
     @Builder
     public User(String name, String email, Role role) {
@@ -34,6 +40,9 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
+    public void addFavoriteDonation(Donation donation) {
+        this.favoriteDonations.add(donation);
+    }
     public String getRoleKey() {
         return this.role.getKey();
     }
