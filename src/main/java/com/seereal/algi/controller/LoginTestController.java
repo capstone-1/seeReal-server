@@ -18,12 +18,6 @@ public class LoginTestController {
 
     @GetMapping("/")
     public String index(Model model) {
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
-
-        if(user != null){
-            model.addAttribute("userName", user.getName());
-        }
-
         return "index";
     }
 }

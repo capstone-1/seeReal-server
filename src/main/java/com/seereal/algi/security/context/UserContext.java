@@ -15,6 +15,9 @@ public class UserContext extends User {
     private UserContext(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }
+    public UserContext(String name, String email, String role) {
+        super(name, email, generateAuthorities(role));
+    }
     public static UserContext fromToken(OAuth2AuthenticationToken token) {
         return new UserContext(token.getPrincipal().getAttributes().get("name").toString(), token.getPrincipal().getAttributes().get("email").toString(), generateAuthorities("GUEST"));
     }

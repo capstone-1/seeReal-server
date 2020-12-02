@@ -19,8 +19,9 @@ public class JwtFactory {
         String token = null;
         try {
             token = JWT.create()
-                    .withClaim("EMAIL", context.getUsername())
-                    .withClaim("NAME", context.getPassword())
+                    .withIssuer(ISSUER)
+                    .withClaim("NAME", context.getUsername())
+                    .withClaim("EMAIL", context.getPassword())
                     .withClaim("USER_ROLE", getUserRole(context.getAuthorities()))
                     .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                     .sign(generateAlgorithm());

@@ -33,8 +33,9 @@ public class  OAuthAuthenticationSuccessHandler implements AuthenticationSuccess
 
 
     private void processResponse(HttpServletResponse response, TokenContext tokenContext) throws IOException {
-        response.setHeader("Authorization", tokenContext.getToken());
-        response.setStatus(HttpStatus.OK.value());
+        response.setHeader("Authorization", generateTokenValue(tokenContext.getToken()));
+        System.out.println("Authorization: " + generateTokenValue(tokenContext.getToken()));
+        response.sendRedirect("/");
     }
 
     @Override

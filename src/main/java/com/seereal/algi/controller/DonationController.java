@@ -4,6 +4,10 @@ import com.seereal.algi.dto.donation.DonationResultDto;
 import com.seereal.algi.dto.donation.DetailDonationResponseDto;
 import com.seereal.algi.dto.donation.DonationSaveRequestDto;
 import com.seereal.algi.dto.donation.SimpleDonationResponseDto;
+import com.seereal.algi.security.context.OrganizationContext;
+import com.seereal.algi.security.context.UserContext;
+import com.seereal.algi.security.jwt.HeaderTokenExtractor;
+import com.seereal.algi.security.jwt.JwtDecoder;
 import com.seereal.algi.service.RegularDonationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +25,13 @@ import java.util.List;
 public class DonationController {
     @Autowired
     private RegularDonationService regularDonationService;
+
+    @Autowired
+    private JwtDecoder jwtDecoder;
+
+    @Autowired
+    private HeaderTokenExtractor extractor;
+
     // 정기기부 등록
     @PostMapping("/regular-donation")
     public String saveRegularDonation(@RequestBody DonationSaveRequestDto requestDto) {
@@ -41,6 +52,14 @@ public class DonationController {
     @GetMapping("/regular-donation/{id}")
     public DetailDonationResponseDto getRegularDonationDetail(@PathVariable Long id) {
         return regularDonationService.getRegularDonationDetail(id);
+    }
+
+    //정기기부 관심 목록에 추가 (개인 사용자별로 유지)
+    @PostMapping("/regular-donation/favorite/{id}")
+    public void addFavoriteDonation(@RequestHeader(value = "Authorization") String tokenPayload, @PathVariable("id") Long id) {
+        String token = extractor.extract(tokenPayload);
+        UserContext userContext = jwtDecoder.decodeJwtForUser(token);
+        regularDonationService.addFavoriteDonation(userContext, id);
     }
 
     //정기기부 분기별 결과 등록
