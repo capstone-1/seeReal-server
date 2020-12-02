@@ -1,0 +1,4 @@
+POST http://127.0.0.1:8080/regular-donation/favorite/2
+Content-Type: application/json
+Authorization: Bearer <JWT-TOKEN>
+###

@@ -1,0 +1,4 @@
+GET http://localhost:8080/portfolio/favorite-donation?size=1&page=2
+Authorization: Bearer <JWT-TOKEN>
+
+###
