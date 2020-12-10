@@ -3,7 +3,9 @@ package com.seereal.algi.service;
 import com.seereal.algi.config.constant.S3Constants;
 import com.seereal.algi.dto.donation.SimpleDonationResponseDto;
 import com.seereal.algi.dto.portfolio.PortfolioCategoryDto;
+import com.seereal.algi.dto.portfolio.PortfolioCategoryListDto;
 import com.seereal.algi.dto.portfolio.PortfolioDto;
+import com.seereal.algi.dto.portfolio.PortfolioListDto;
 import com.seereal.algi.model.category.Category;
 import com.seereal.algi.model.category.CategoryRepository;
 import com.seereal.algi.model.donation.Donation;
@@ -56,12 +58,12 @@ public class PortfolioService {
         return EntityModel.of(new PortfolioDto(portfolio));
     }
 
-    public EntityModel<List<PortfolioDto>> getPortfolios(UserContext context) {
+    public EntityModel<PortfolioListDto> getPortfolios(UserContext context) {
         User user = userRepository.findByEmail(context.getPassword()).orElseThrow(() -> new NoSuchElementException("User Not Found!"));
-        return EntityModel.of(user.getPortfolios().stream().map(PortfolioDto::new).collect(Collectors.toList()));
+        return EntityModel.of(new PortfolioListDto(user.getPortfolios().stream().map(PortfolioDto::new).collect(Collectors.toList())));
     }
 
-    public EntityModel<List<PortfolioCategoryDto>> getPortfolioCategories(UserContext context) {
+    public EntityModel<PortfolioCategoryListDto> getPortfolioCategories(UserContext context) {
         User user = userRepository.findByEmail(context.getPassword()).orElseThrow(() -> new NoSuchElementException("User Not Found!"));
         List<List<String>> categoryList = user.getPortfolios().stream().map(p -> Arrays.asList(p.getCategories().split(" "))).collect(Collectors.toList());
         Map<String, Integer> categoryMap = new HashMap<>();
@@ -78,7 +80,7 @@ public class PortfolioService {
         for (Map.Entry<String, Integer> entry : categoryMap.entrySet()) {
             portfolioCategoryDtos.add(new PortfolioCategoryDto(entry.getKey(), entry.getValue()));
         }
-        return EntityModel.of(portfolioCategoryDtos);
+        return EntityModel.of(new PortfolioCategoryListDto(portfolioCategoryDtos));
     }
 
     public String categoriestoString(List<String> categories) {
