@@ -2,6 +2,7 @@ package com.seereal.algi.model.user;
 
 import com.seereal.algi.model.BaseTimeEntity;
 import com.seereal.algi.model.donation.Donation;
+import com.seereal.algi.model.portfolio.Portfolio;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,9 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;  // Role: 직접 만드는 클래스
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "users")
-    private List<Donation> favoriteDonations = new ArrayList<>();
+    private List<Donation> interestDonations = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Portfolio> portfolios = new ArrayList<>();
 
     @Builder
     public User(String name, String email, Role role) {
@@ -41,7 +44,7 @@ public class User extends BaseTimeEntity {
     }
 
     public void addFavoriteDonation(Donation donation) {
-        this.favoriteDonations.add(donation);
+        this.interestDonations.add(donation);
     }
     public String getRoleKey() {
         return this.role.getKey();

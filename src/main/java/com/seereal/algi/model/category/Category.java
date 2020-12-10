@@ -1,5 +1,6 @@
 package com.seereal.algi.model.category;
 
+import com.seereal.algi.model.portfolio.Portfolio;
 import com.seereal.algi.model.registeredCampaign.RegisteredCampaign;
 import com.seereal.algi.model.donation.Donation;
 import lombok.Getter;
