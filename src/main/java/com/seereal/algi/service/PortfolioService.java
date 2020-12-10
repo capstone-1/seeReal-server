@@ -11,6 +11,7 @@ import com.seereal.algi.model.category.CategoryRepository;
 import com.seereal.algi.model.donation.Donation;
 import com.seereal.algi.model.donation.DonationRepository;
 import com.seereal.algi.model.portfolio.Portfolio;
+import com.seereal.algi.model.portfolio.PortfolioRepository;
 import com.seereal.algi.model.user.User;
 import com.seereal.algi.model.user.UserRepository;
 import com.seereal.algi.security.context.UserContext;
@@ -37,6 +38,8 @@ public class PortfolioService {
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
+    private PortfolioRepository portfolioRepository;
+    @Autowired
     private S3Util s3Util;
 
     public PagedModel<EntityModel<SimpleDonationResponseDto>> getFavoriteDonations(Pageable pageable, UserContext context) {
@@ -55,6 +58,7 @@ public class PortfolioService {
         Portfolio portfolio = Portfolio.builder().name(user.getName())
                 .user(user)
                 .categories(categoriestoString(dto.getCategories())).build();
+        portfolioRepository.save(portfolio);
         return EntityModel.of(new PortfolioDto(portfolio));
     }
 
