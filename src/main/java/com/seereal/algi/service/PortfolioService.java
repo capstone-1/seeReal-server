@@ -2,6 +2,7 @@ package com.seereal.algi.service;
 
 import com.seereal.algi.config.constant.S3Constants;
 import com.seereal.algi.dto.donation.SimpleDonationResponseDto;
+import com.seereal.algi.dto.portfolio.PortfolioCategoryDto;
 import com.seereal.algi.dto.portfolio.PortfolioDto;
 import com.seereal.algi.model.category.Category;
 import com.seereal.algi.model.category.CategoryRepository;
@@ -22,8 +23,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.seereal.algi.config.constant.S3Constants.DONATION_IMAGE;
@@ -59,6 +59,26 @@ public class PortfolioService {
     public EntityModel<List<PortfolioDto>> getPortfolios(UserContext context) {
         User user = userRepository.findByEmail(context.getPassword()).orElseThrow(() -> new NoSuchElementException("User Not Found!"));
         return EntityModel.of(user.getPortfolios().stream().map(PortfolioDto::new).collect(Collectors.toList()));
+    }
+
+    public EntityModel<List<PortfolioCategoryDto>> getPortfolioCategories(UserContext context) {
+        User user = userRepository.findByEmail(context.getPassword()).orElseThrow(() -> new NoSuchElementException("User Not Found!"));
+        List<List<String>> categoryList = user.getPortfolios().stream().map(p -> Arrays.asList(p.getCategories().split(" "))).collect(Collectors.toList());
+        Map<String, Integer> categoryMap = new HashMap<>();
+        for (List<String> categories: categoryList) {
+            for (String category: categories) {
+                if (!categoryMap.containsKey(category)) {
+                    categoryMap.put(category, 1);
+                } else {
+                    categoryMap.put(category, categoryMap.get(category) + 1);
+                }
+            }
+        }
+        List<PortfolioCategoryDto> portfolioCategoryDtos = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : categoryMap.entrySet()) {
+            portfolioCategoryDtos.add(new PortfolioCategoryDto(entry.getKey(), entry.getValue()));
+        }
+        return EntityModel.of(portfolioCategoryDtos);
     }
 
     public String categoriestoString(List<String> categories) {

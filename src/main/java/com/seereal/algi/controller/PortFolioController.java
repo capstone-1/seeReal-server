@@ -1,6 +1,7 @@
 package com.seereal.algi.controller;
 
 import com.seereal.algi.dto.donation.SimpleDonationResponseDto;
+import com.seereal.algi.dto.portfolio.PortfolioCategoryDto;
 import com.seereal.algi.dto.portfolio.PortfolioDto;
 import com.seereal.algi.security.context.UserContext;
 import com.seereal.algi.security.jwt.HeaderTokenExtractor;
@@ -31,10 +32,17 @@ public class PortFolioController {
 
 
     @GetMapping("/portfolio")
-    public ResponseEntity<EntityModel<List<PortfolioDto>>> getportfolios(@RequestHeader(value = "Authorization") String tokenPayload) {
+    public ResponseEntity<EntityModel<List<PortfolioDto>>> getPortfolios(@RequestHeader(value = "Authorization") String tokenPayload) {
         String token = extractor.extract(tokenPayload);
         UserContext userContext = jwtDecoder.decodeJwtForUser(token);
         return new ResponseEntity<>(portfolioService.getPortfolios(userContext), HttpStatus.OK);
+    }
+
+    @GetMapping("/portfolio/category-graph")
+    public ResponseEntity<EntityModel<List<PortfolioCategoryDto>>> getPortfolioCategories(@RequestHeader(value = "Authorization") String tokenPayload) {
+        String token = extractor.extract(tokenPayload);
+        UserContext userContext = jwtDecoder.decodeJwtForUser(token);
+        return new ResponseEntity<>(portfolioService.getPortfolioCategories(userContext), HttpStatus.OK);
     }
 
     @GetMapping("/portfolio/interest-donation")
