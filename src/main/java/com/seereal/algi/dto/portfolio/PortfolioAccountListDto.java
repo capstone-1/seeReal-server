@@ -1,0 +1,1 @@
+package com.seereal.algi.dto.portfolio;import lombok.AllArgsConstructor;import lombok.Getter;import lombok.NoArgsConstructor;import java.util.ArrayList;import java.util.List;@Getter@NoArgsConstructor@AllArgsConstructorpublic class PortfolioAccountListDto {    public List<PortfolioAccountDto> portfolioAccountDtos = new ArrayList<>();}

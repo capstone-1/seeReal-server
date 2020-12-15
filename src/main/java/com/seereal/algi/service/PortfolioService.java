@@ -2,10 +2,7 @@ package com.seereal.algi.service;
 
 import com.seereal.algi.config.constant.S3Constants;
 import com.seereal.algi.dto.donation.SimpleDonationResponseDto;
-import com.seereal.algi.dto.portfolio.PortfolioCategoryDto;
-import com.seereal.algi.dto.portfolio.PortfolioCategoryListDto;
-import com.seereal.algi.dto.portfolio.PortfolioDto;
-import com.seereal.algi.dto.portfolio.PortfolioListDto;
+import com.seereal.algi.dto.portfolio.*;
 import com.seereal.algi.model.category.Category;
 import com.seereal.algi.model.category.CategoryRepository;
 import com.seereal.algi.model.donation.Donation;
@@ -65,6 +62,11 @@ public class PortfolioService {
     public EntityModel<PortfolioListDto> getPortfolios(UserContext context) {
         User user = userRepository.findByEmail(context.getPassword()).orElseThrow(() -> new NoSuchElementException("User Not Found!"));
         return EntityModel.of(new PortfolioListDto(user.getPortfolios().stream().map(PortfolioDto::new).collect(Collectors.toList())));
+    }
+
+    public EntityModel<PortfolioAccountListDto> getPortfoliowithAccount(UserContext context) {
+        User user = userRepository.findByEmail(context.getPassword()).orElseThrow(() -> new NoSuchElementException("User Not Found!"));
+        return EntityModel.of(new PortfolioAccountListDto(user.getPortfolios().stream().map(PortfolioAccountDto::new).collect(Collectors.toList())));
     }
 
     public EntityModel<PortfolioCategoryListDto> getPortfolioCategories(UserContext context) {
