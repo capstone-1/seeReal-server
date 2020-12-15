@@ -8,7 +8,7 @@ conversion_cost, exchange_cost, etc_non_business_cost)
 values (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19);
 
 INSERT INTO ORGANIZATION (organization_id, name, password, email, phone_number, register_number, account, TAX_INCOME_SUMMARY_ID, TAX_OUTCOME_SUMMARY_ID)
-VALUES (1, 'test', 'dGVzdHB3', 'testmail', 'testphone', '12345678', 'nick', 1, 1);
+VALUES (1, 'test', '$2a$10$TYuPnixj0E3qmrv8g9toW.3ueOLFL3ILh9F.xR1T2HVofH8p4h', 'testmail', 'testphone', '12345678', 'nick', 1, 1);
 
 insert into activity (ACTIVITY_ID, LIMITATION, NAME, PERFORMANCE, ORGANIZATION_ID)
 values (1, 'woo', 'name', 'wow', 1);
