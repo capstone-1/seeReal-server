@@ -52,7 +52,7 @@ public class PortfolioService {
 
     public EntityModel<PortfolioDto> addPortfolio(UserContext context, SimpleDonationResponseDto dto) {
         User user = userRepository.findByEmail(context.getPassword()).orElseThrow(() -> new NoSuchElementException("User Not Found!"));
-        Portfolio portfolio = Portfolio.builder().name(user.getName())
+        Portfolio portfolio = Portfolio.builder().name(dto.getName())
                 .user(user)
                 .categories(categoriestoString(dto.getCategories())).build();
         portfolioRepository.save(portfolio);
