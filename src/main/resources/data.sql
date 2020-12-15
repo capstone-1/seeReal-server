@@ -174,8 +174,6 @@ values (19, '하당노인복지관', 'reg19', '최고의 가치와 감동, 호�
 insert into donation_category (DONATION_ID, CATEGORY_ID)
 values (1, 3);
 insert into donation_category (DONATION_ID, CATEGORY_ID)
-values (1, 4);
-insert into donation_category (DONATION_ID, CATEGORY_ID)
 values (1, 7);
 insert into donation_category (DONATION_ID, CATEGORY_ID)
 values (1, 9);
